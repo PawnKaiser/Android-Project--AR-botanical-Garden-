@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">AR Botanical Garden</string>
+    <string name="action_settings">Settings</string>
+    <string name="navigation_header">Navigation</string>
+    <string name="TitleSplashScreen">The botanical garden  \n\t lovin it !</string>
+    <string name="title_activity_navigation">Navigation</string>
+    <string name="hello_world">Hello world!</string>
+    <string-array name="Splash_message">
+        <item >Starting animation ...</item>
+        <item >parsing hotspots ...</item>
+        <item >calculating Bounding box ...</item>
+        <item >registrate the broadcast receiver ...</item>
+        <item >Ready !</item>
+    </string-array>
+        <string name="titleSplash">Loading app resources ...</string>
+        <string name="Ready">App Ready</string>
+        <string name="powered">Powered by Gr1 staff</string>
+
+</resources>
