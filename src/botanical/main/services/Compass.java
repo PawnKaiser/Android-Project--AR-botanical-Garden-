@@ -5,6 +5,16 @@ import android.content.Intent;
 import android.os.IBinder;
 
 public class Compass extends Service {
+	
+	private float azimuth;
+	
+	/**
+	 * @return the azimuth
+	 */
+	public float getAzimuth() {
+		return azimuth;
+	}
+
 	public Compass() {
 	}
 

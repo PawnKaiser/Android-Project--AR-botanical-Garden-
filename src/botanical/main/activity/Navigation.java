@@ -1,8 +1,11 @@
 package botanical.main.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.widget.Toast;
+import botanical.main.services.GPS;
 
 import com.example.mouddeneandroidproject.R;
 
@@ -12,6 +15,9 @@ public class Navigation extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_navigation);
+		
+		startService(new Intent(this, GPS.class));
+		Toast.makeText(this, "GPS service started", Toast.LENGTH_LONG).show();
 	}
 
 	@Override

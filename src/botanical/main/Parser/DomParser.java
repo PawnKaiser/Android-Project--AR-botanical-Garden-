@@ -15,6 +15,7 @@ import org.w3c.dom.NodeList;
  * 
  * @author mouddene
  * this class handel all hotspot in the XML Location Data
+ * on 
  */
 
 public class DomParser {
