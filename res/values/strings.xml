@@ -17,5 +17,10 @@
         <string name="titleSplash">Loading app resources ...</string>
         <string name="Ready">App Ready</string>
         <string name="powered">Powered by Gr1 staff</string>
+        <string name="arboretum">Bienvenue à l\'Arboretum</string>
+        <string name="powered_fr">\@Copyright \"Groupe1 - M1 Miage\"</string>
+        <string name="textDetection_fr">En cours de recherche...</string>
+        <string name="advice_fr">Placez votre tablette face à un arbre...</string>
+        <string name="TitleSplashScreen_fr">Bienvenue à l\'Arboretum !</string>
 
 </resources>
