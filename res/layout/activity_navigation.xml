@@ -40,6 +40,17 @@
         android:layout_below="@+id/progressBar1"
         android:layout_marginTop="42dp"
         android:ems="10"
-        android:text="@string/advice_fr" android:inputType=""/>
+        android:hint="@string/advice_fr"
+        android:text="@string/advice_fr"/>
+    
+	<Button
+	    android:id="@+id/bouton_recup_coordGeo"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/editText1"
+	    android:layout_below="@+id/editText1"
+	    android:text="Afficher ma Position" />
 
 </RelativeLayout>
+
+

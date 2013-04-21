@@ -24,21 +24,19 @@ public final class R {
         public static final int activity_vertical_margin=0x7f040001;
     }
     public static final class drawable {
-        public static final int background_1=0x7f020000;
-        public static final int background_2=0x7f020001;
-        public static final int background_3=0x7f020002;
-        public static final int background_4=0x7f020003;
-        public static final int ic_launcher=0x7f020004;
+        public static final int background_4=0x7f020000;
+        public static final int ic_launcher=0x7f020001;
     }
     public static final class id {
         public static final int RelativeLayout1=0x7f090000;
-        public static final int action_settings=0x7f090007;
+        public static final int action_settings=0x7f090008;
+        public static final int bouton_recup_coordGeo=0x7f090004;
         public static final int editText1=0x7f090002;
         public static final int editText2=0x7f090003;
         public static final int progressBar1=0x7f090001;
-        public static final int textView1=0x7f090004;
-        public static final int textView2=0x7f090005;
-        public static final int textView3=0x7f090006;
+        public static final int textView1=0x7f090005;
+        public static final int textView2=0x7f090006;
+        public static final int textView3=0x7f090007;
     }
     public static final class layout {
         public static final int activity_navigation=0x7f030000;
@@ -57,6 +55,8 @@ public final class R {
         public static final int app_name=0x7f050000;
         public static final int arboretum=0x7f050009;
         public static final int hello_world=0x7f050005;
+        public static final int latitude_fr=0x7f05000e;
+        public static final int longitude_fr=0x7f05000f;
         public static final int navigation_header=0x7f050002;
         public static final int powered=0x7f050008;
         public static final int powered_fr=0x7f05000a;
