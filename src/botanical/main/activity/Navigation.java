@@ -22,7 +22,7 @@ public class Navigation extends Activity {
     private static final long MINIMUM_TIME_BETWEEN_UPDATES = 1000; // in Milliseconds
 
     protected LocationManager locationManager;
-    protected Button afficherPositionGeo;
+    //protected Button afficherPositionGeo;
     
     
     
@@ -32,7 +32,7 @@ public class Navigation extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_navigation);
 		
-		afficherPositionGeo = (Button) findViewById(R.id.bouton_recup_coordGeo);
+		//afficherPositionGeo = (Button) findViewById(R.id.bouton_recup_coordGeo);
 		
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(
@@ -41,15 +41,17 @@ public class Navigation extends Activity {
                 MINIMUM_DISTANCE_CHANGE_FOR_UPDATES,
                 new MyLocationListener()
         );
-
+        showCurrentLocation(locationManager);
+        /*
         afficherPositionGeo.setOnClickListener(new OnClickListener() {
     		@Override
             public void onClick(View v) {
 
                 showCurrentLocation(locationManager);
             }
+       
     });       
-
+         */
     }   
 	//----------------------------------------------------------------
 	/* Tarik: Méthode pour afficher la position actuelle */
@@ -113,26 +115,26 @@ public class Navigation extends Activity {
 	
 	    public void onLocationChanged(Location location) {
 	        String message = String.format(
-	                "New Location \n Longitude: %1$s \n Latitude: %2$s",
+	                "Nouvelle Position \n Longitude: %1$s \n Latitude: %2$s",
 	                location.getLongitude(), location.getLatitude()
 	        );
 	        Toast.makeText(Navigation.this, message, Toast.LENGTH_LONG).show();
 	    }
 	
 	    public void onStatusChanged(String s, int i, Bundle b) {
-	        Toast.makeText(Navigation.this, "Provider status changed",
+	        Toast.makeText(Navigation.this, "Changement d'état du GPS",
 	                Toast.LENGTH_LONG).show();
 	    }
 	
 	    public void onProviderDisabled(String s) {
 	        Toast.makeText(Navigation.this,
-	                "Provider disabled by the user. GPS turned off",
+	                "GPS Désactivé",
 	                Toast.LENGTH_LONG).show();
 	    }
 	
 	    public void onProviderEnabled(String s) {
 	        Toast.makeText(Navigation.this,
-	                "Provider enabled by the user. GPS turned on",
+	                "GPS Activé",
 	                Toast.LENGTH_LONG).show();
 	    }
 	
