@@ -24,5 +24,6 @@
         <string name="TitleSplashScreen_fr">Bienvenue à l\'Arboretum !</string>
         <string name="latitude_fr">Ma Latitude:</string>
         <string name="longitude_fr">Ma Longitude:</string>
+        <string name="afficheLongLat_fr">Afficher Position</string>
 
 </resources>

@@ -29,14 +29,12 @@ public final class R {
     }
     public static final class id {
         public static final int RelativeLayout1=0x7f090000;
-        public static final int action_settings=0x7f090008;
-        public static final int bouton_recup_coordGeo=0x7f090004;
-        public static final int editText1=0x7f090002;
-        public static final int editText2=0x7f090003;
+        public static final int action_settings=0x7f090006;
+        public static final int bouton_recup_coordGeo=0x7f090002;
         public static final int progressBar1=0x7f090001;
-        public static final int textView1=0x7f090005;
-        public static final int textView2=0x7f090006;
-        public static final int textView3=0x7f090007;
+        public static final int textView1=0x7f090003;
+        public static final int textView2=0x7f090004;
+        public static final int textView3=0x7f090005;
     }
     public static final class layout {
         public static final int activity_navigation=0x7f030000;
@@ -52,6 +50,7 @@ public final class R {
         public static final int TitleSplashScreen_fr=0x7f05000d;
         public static final int action_settings=0x7f050001;
         public static final int advice_fr=0x7f05000c;
+        public static final int afficheLongLat_fr=0x7f050010;
         public static final int app_name=0x7f050000;
         public static final int arboretum=0x7f050009;
         public static final int hello_world=0x7f050005;

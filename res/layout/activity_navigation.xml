@@ -20,37 +20,32 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="171dp" />
 
-    <EditText
-        android:id="@+id/editText1"
+    <Button
+        android:id="@+id/bouton_recup_coordGeo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="18dp"
-        android:ems="10"
-        android:hint="@string/textDetection_fr"
-        android:text="@string/textDetection_fr"
-        android:textSize="36sp" />
+        android:layout_marginTop="81dp"
+        android:text="@string/afficheLongLat_fr" />
 
-    <EditText
-        android:id="@+id/editText2"
+    <TextView
+        android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editText1"
-        android:layout_alignRight="@+id/editText1"
-        android:layout_below="@+id/progressBar1"
-        android:layout_marginTop="42dp"
-        android:ems="10"
-        android:hint="@string/advice_fr"
-        android:text="@string/advice_fr"/>
-    
-	<Button
-	    android:id="@+id/bouton_recup_coordGeo"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_alignLeft="@+id/editText1"
-	    android:layout_below="@+id/editText1"
-	    android:text="Afficher ma Position" />
+        android:layout_alignLeft="@+id/bouton_recup_coordGeo"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="36dp"
+        android:text="@string/textDetection_fr"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/bouton_recup_coordGeo"
+        android:layout_below="@+id/bouton_recup_coordGeo"
+        android:text="@string/advice_fr"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="14sp" />
 
 </RelativeLayout>
-
-
