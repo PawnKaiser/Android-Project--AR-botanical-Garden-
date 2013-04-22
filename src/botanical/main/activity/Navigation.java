@@ -18,31 +18,32 @@ import com.example.mouddeneandroidproject.R;
 
 public class Navigation extends Activity {
 	
-	private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
-    private static final long MINIMUM_TIME_BETWEEN_UPDATES = 1000; // in Milliseconds
-
+	/* Par Tarik: 22/04/2013 */
+	
+	private static final long DISTANCE_MINIMALE_PrMAJ_LaPOSITION = 1; // in Meters
+    private static final long TEMPS_MINIMAL_PrMAJ_LaPOSITION = 1000; // in Milliseconds
+    
     protected LocationManager locationManager;
-    //protected Button afficherPositionGeo;
-    
-    
-    
+    protected Button afficherPositionGeo;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_navigation);
 		
-		//afficherPositionGeo = (Button) findViewById(R.id.bouton_recup_coordGeo);
+		afficherPositionGeo = (Button) findViewById(R.id.bouton_recup_coordGeo);
 		
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
-                MINIMUM_TIME_BETWEEN_UPDATES,
-                MINIMUM_DISTANCE_CHANGE_FOR_UPDATES,
+                TEMPS_MINIMAL_PrMAJ_LaPOSITION,
+                DISTANCE_MINIMALE_PrMAJ_LaPOSITION,
                 new MyLocationListener()
         );
+        //Tarik: Affichage dynamique des positions (Sans que l'utilisateur ait à appuyer sur le bouton)
         showCurrentLocation(locationManager);
-        /*
+        
+        //Tarik: Affichage statique (dans le cas où le dynamique soit quelque peut dysfonctionnel)/Tout Prévoir.com, lol
         afficherPositionGeo.setOnClickListener(new OnClickListener() {
     		@Override
             public void onClick(View v) {
@@ -51,7 +52,6 @@ public class Navigation extends Activity {
             }
        
     });       
-         */
     }   
 	//----------------------------------------------------------------
 	/* Tarik: Méthode pour afficher la position actuelle */
@@ -66,8 +66,6 @@ public class Navigation extends Activity {
     	 * et bien, on se basera sur le Net pour une plus grande rapidité dans la récupération des positions
     	 */
 
-    	
-    	
     	if ((!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) || (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)))
     	{
     		Location locationNetwork = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -98,18 +96,19 @@ public class Navigation extends Activity {
     } 
     //----------------------------------------------------------------
     //Turn GPS ON [By Tarik]
-    private void turnGPSOn(){
+    private void turnGPSOn()
+    {
   		  String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
   		  if(!provider.contains("gps"))
   		  {
-  		    final Intent poke = new Intent();
-  		    poke.setClassName("com.android.settings", "com.android.settings.widget.SettingsAppWidgetProvider");
-  		    poke.addCategory(Intent.CATEGORY_ALTERNATIVE);
-  		    poke.setData(Uri.parse("3")); 
-  		    sendBroadcast(poke);
-  		    Toast.makeText(this, "GPS Activé",Toast.LENGTH_SHORT).show();
+	  		    final Intent poke = new Intent();
+	  		    poke.setClassName("com.android.settings", "com.android.settings.widget.SettingsAppWidgetProvider");
+	  		    poke.addCategory(Intent.CATEGORY_ALTERNATIVE);
+	  		    poke.setData(Uri.parse("3")); 
+	  		    sendBroadcast(poke);
+	  		    Toast.makeText(this, "GPS Activé",Toast.LENGTH_SHORT).show();
   		  }
-  		}
+  	}
     //----------------------------------------------------------------
 	private class MyLocationListener implements LocationListener {
 	
