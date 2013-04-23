@@ -53,6 +53,7 @@ public final class R {
         public static final int afficheLongLat_fr=0x7f050010;
         public static final int app_name=0x7f050000;
         public static final int arboretum=0x7f050009;
+        public static final int compass=0x7f050011;
         public static final int hello_world=0x7f050005;
         public static final int latitude_fr=0x7f05000e;
         public static final int longitude_fr=0x7f05000f;
