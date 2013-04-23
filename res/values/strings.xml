@@ -26,5 +26,6 @@
         <string name="longitude_fr">Ma Longitude:</string>
         <string name="afficheLongLat_fr">Afficher Position</string>
         <string name="compass"></string>
+        <string name="compass2"></string>
 
 </resources>

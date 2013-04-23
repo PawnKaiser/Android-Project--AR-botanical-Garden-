@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -19,10 +18,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.mouddeneandroidproject.R;
 
-@SuppressWarnings("deprecation")
 public class Navigation extends Activity implements SensorEventListener {
 	
 	/* Par Tarik: 22/04/2013 */
@@ -33,32 +30,33 @@ public class Navigation extends Activity implements SensorEventListener {
 	protected LocationManager locationManager;
 	protected Button afficherPositionGeo;
 	
-	private SensorManager mgr;
-	private Sensor compass;
-	private TextView text;
+	private SensorManager mSensorManager;
+	private Sensor mAccelerometer, mField;
+	private TextView text,text2;
 	
+	private float[] mGravity;
+	private float[] mMagnetic;
 	
-	//onCreate [Lancement] -------------------------------------------------
+	//----------------------------------------------------------------------
+	//onCreate [Lancement]
+	//----------------------------------------------------------------------
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_navigation);
-	
-		/* Boussole */
-		mgr = (SensorManager) this.getSystemService(SENSOR_SERVICE);
-        compass = mgr.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        text = (TextView) findViewById(R.id.textView3);
-        
-        
-		/* Géolocalisation */
+		
+		/*Tarik: Boussole */
+		mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+		mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+		mField = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+		text = (TextView) findViewById(R.id.textView3);
+		text2 = (TextView) findViewById(R.id.textView4);
+		
+		/*Tarik: Géolocalisation */
 		afficherPositionGeo = (Button) findViewById(R.id.bouton_recup_coordGeo);
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		locationManager.requestLocationUpdates(
-		LocationManager.GPS_PROVIDER,
-		TEMPS_MINIMAL_PrMAJ_LaPOSITION,
-		DISTANCE_MINIMALE_PrMAJ_LaPOSITION,
-		new MyLocationListener()
-		);
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, TEMPS_MINIMAL_PrMAJ_LaPOSITION, DISTANCE_MINIMALE_PrMAJ_LaPOSITION,new MyLocationListener());
+		
 		//Tarik: Affichage dynamique des positions (Sans que l'utilisateur ait à appuyer sur le bouton)
 		showCurrentLocation(locationManager);
 		
@@ -71,36 +69,19 @@ public class Navigation extends Activity implements SensorEventListener {
 			}
 		});       
 	}   
-	 @Override
-	    protected void onResume() {
-	        mgr.registerListener(this, compass, SensorManager.SENSOR_DELAY_NORMAL);
-	      super.onResume();
-	    }
-
-	    @Override
-	    protected void onPause() {
-	        mgr.unregisterListener(this, compass);
-	      super.onPause();
-	    }
-
-	  public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-	  }
-
-	  public void onSensorChanged(SensorEvent event) {
-	            String msg = String.format("X: %8.4f\nY: %8.4f\nZ: %8.4f",
-	              event.values[0], event.values[1], event.values[2]);
-	        text.setText(msg);
-	        text.invalidate();
-	  }
+	
+	/*----------------------------------
+	------------------------------------
+	//TARIK: METHODES DE GEOLOCALISATION
+	------------------------------------
+	-----------------------------------*/
+	
 	//----------------------------------------------------------------
-	/* Tarik: Méthode pour afficher la position actuelle */
+	/* Tarik 23/04/2013 : Méthode pour afficher la position actuelle */
 	//----------------------------------------------------------------
 	
 	protected void showCurrentLocation(LocationManager locationManager) 
 	{
-		
-
 		/* Par Tarik: Si le GPS est désactivé mais par un miracle quelconque
 		* on arrive à chopper le Wifi à l'arboretum (Esprit visionnaire quand tu nous tiens...)
 		* et bien, on se basera sur le Net pour une plus grande rapidité dans la récupération des positions
@@ -133,8 +114,6 @@ public class Navigation extends Activity implements SensorEventListener {
 			Toast.makeText(Navigation.this, "En cours de recherche du signal... Patience, ça va venir...", Toast.LENGTH_LONG).show();
 			this.turnGPSOn();
 		}
-		
-
 	} 
 	//----------------------------------------------------------------
 	//Turn GPS ON [By Tarik]
@@ -152,20 +131,8 @@ public class Navigation extends Activity implements SensorEventListener {
 		}
 	}
 	//----------------------------------------------------------------
-	//Get the Azimuth [By Tarik]
-	private float getAzimuth()
-	{
-		float RR[] = new float[9];
-		float orientation[] = new float[3];
-		
-		float [] orientation1 = SensorManager.getOrientation(RR, orientation);
-		float azimuth = orientation1[0];
-		
-		return azimuth;
-	}
-	
+	////Tarik 23/04/2013 : Location (GEO) Listeners
 	//----------------------------------------------------------------
-	//Location (GEO) Listener
 	private class MyLocationListener implements LocationListener {
 		
 		public void onLocationChanged(Location location) {
@@ -194,7 +161,90 @@ public class Navigation extends Activity implements SensorEventListener {
 		}
 		
 	}
+	
+	/*----------------------------------
+	------------------------------------
+	//TARIK: METHODES D' ORIENTATION
+	------------------------------------
+	-----------------------------------*/
+	
 	//----------------------------------------------------------------
+	//Tarik 23/04/2013: MAJ Dynamique de la Direction (azimuth)
+	//----------------------------------------------------------------
+	private void updateDirection() 
+	{
+		float[] temp = new float[9];
+		float[] R = new float[9];
+		//Load rotation matrix into R
+		SensorManager.getRotationMatrix(temp, null, mGravity, mMagnetic);
+		//Remap to camera's point-of-view
+		SensorManager.remapCoordinateSystem(temp, SensorManager.AXIS_X, SensorManager.AXIS_Z, R);
+		//Return the orientation values
+		float[] values = new float[3];
+		SensorManager.getOrientation(R, values);
+		//Convert to degrees
+		for (int i=0; i < values.length; i++) {
+			Double degrees = (values[i] * 180) / Math.PI;
+			values[i] = degrees.floatValue();
+		}
+		//Display the compass direction
+		text.setText( getDirectionFromDegrees(values[0]) );
+		//Display the raw values
+		text2.setText(String.format("Azimuth: %1$1.2f, Pitch: %2$1.2f, Roll: %3$1.2f",
+		values[0], values[1], values[2]));
+	}
+	//--------------------------------------------------------------------------------------
+	//Tarik 23/04/2013: Petite phase de conversion pour avoir l'Azimuth à partir des Degrés
+	//--------------------------------------------------------------------------------------
+	private String getDirectionFromDegrees(float degrees) 
+	{
+		if(degrees >= -22.5 && degrees < 22.5) { return "Nord"; }
+		if(degrees >= 22.5 && degrees < 67.5) { return "Nord-Est"; }
+		if(degrees >= 67.5 && degrees < 112.5) { return "Est"; }
+		if(degrees >= 112.5 && degrees < 157.5) { return "Sud-Est"; }
+		if(degrees >= 157.5 || degrees < -157.5) { return "Sud"; }
+		if(degrees >= -157.5 && degrees < -112.5) { return "Sud-Ouest"; }
+		if(degrees >= -112.5 && degrees < -67.5) { return "Ouest"; }
+		if(degrees >= -67.5 && degrees < -22.5) { return "Nord-Ouest"; }
+
+		return null;
+	}
+	//----------------------------------------------------------------
+	//Tarik 23/04/2013 : Compass Listeners
+	//----------------------------------------------------------------
+	protected void onResume() {
+		mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
+		mSensorManager.registerListener(this, mField, SensorManager.SENSOR_DELAY_UI);
+		super.onResume();
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		mSensorManager.unregisterListener(this);
+	}
+	@Override
+	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+		
+	}
+	@Override
+	public void onSensorChanged(SensorEvent event) 
+	{
+		switch(event.sensor.getType()) {
+		case Sensor.TYPE_ACCELEROMETER:
+			mGravity = event.values.clone();
+			break;
+		case Sensor.TYPE_MAGNETIC_FIELD:
+			mMagnetic = event.values.clone();
+			break;
+		default:
+			return;
+		}
+		
+		if(mGravity != null && mMagnetic != null) {
+			updateDirection();
+		}
+	}
 	//----------------------------------------------------------------
 
 }
