@@ -18,7 +18,7 @@ import botanical.main.Parser.HotSpotModel;
 import botanical.main.activity.hotSpot.BoundingBox;
 import botanical.main.broadcastReceiver.NavigationBR;
 
-import com.example.mouddeneandroidproject.R;
+import com.example.gp1androidproject.R;
 /**
  * 
  * @author mouddene

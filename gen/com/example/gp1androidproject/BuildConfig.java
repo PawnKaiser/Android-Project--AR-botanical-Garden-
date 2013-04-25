@@ -1,5 +1,5 @@
 /** Automatically generated file. DO NOT MODIFY */
-package com.example.mouddeneandroidproject;
+package com.example.gp1androidproject;
 
 public final class BuildConfig {
     public final static boolean DEBUG = true;

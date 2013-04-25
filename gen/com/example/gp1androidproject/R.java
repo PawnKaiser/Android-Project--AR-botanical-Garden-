@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package com.example.mouddeneandroidproject;
+package com.example.gp1androidproject;
 
 public final class R {
     public static final class array {

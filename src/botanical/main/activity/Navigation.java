@@ -32,7 +32,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mouddeneandroidproject.R;
+import com.example.gp1androidproject.R;
 
 public class Navigation extends Activity implements SensorEventListener {
 	
@@ -262,10 +262,7 @@ public class Navigation extends Activity implements SensorEventListener {
 		return null;
 	}
 	//Tarik 25/04/2013: Affiche que l'azimut
-	private float getExactAzimuthForXMLFile(float degrees)
-	{
-		return degrees;
-	}
+	private float getExactAzimuthForXMLFile(float degrees){ return degrees; }
 	
 	//----------------------------------------------------------------
 	//Tarik 23/04/2013 : Compass Listeners
@@ -310,6 +307,7 @@ public class Navigation extends Activity implements SensorEventListener {
 	------------------------------------
 	-----------------------------------*/
 	
+	//On souhaite chopper l'arbre qui nous interesse en dépend de sa lat & long
 	public void findElement(String longitude, String latitude) throws IOException, ParserConfigurationException, SAXException
 	{
 		InputStream raw = this.getApplicationContext().getAssets()
