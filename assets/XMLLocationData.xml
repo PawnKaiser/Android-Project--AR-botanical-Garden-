@@ -2,20 +2,27 @@
 <locationData>
 <hotspot>
 	<id>1</id>
-	<latitude>45.1865522</latitude>
+	<latitude>45.1865888</latitude>
 	<longitude>5.7449424</longitude>
 	<azimuth>0</azimuth>
+	<information>ras</information>
+	<img>ras</img>
 </hotspot>
 <hotspot>
 	<id>2</id>
-	<latitude>45.1865888</latitude>
-	<longitude>5.7449423</longitude>
+	<latitude>45.1865492</latitude>
+	<longitude>5.744966</longitude>
 	<azimuth>0</azimuth>
+	<title>Sapin</title>
+	<information>Un sacré conifère cuilà</information>
+	<img>sapin</img>
 </hotspot>
 <hotspot>
 	<id>3</id>
-	<latitude>45.186557</latitude>
-	<longitude>5.7449426</longitude>
+	<latitude>45.1111111</latitude>
+	<longitude>5.7448932</longitude>
 	<azimuth>0</azimuth>
+	<information>ras</information>
+	<img>ras</img>
 </hotspot>
 </locationData>

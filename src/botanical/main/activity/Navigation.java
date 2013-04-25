@@ -29,6 +29,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.provider.Settings;
 import org.w3c.dom.Element;
 import android.view.View;
@@ -44,6 +45,11 @@ public class Navigation extends Activity implements SensorEventListener {
 	/* Par Tarik: 22/04/2013 */
 	
 	/* Variables GEO */
+	/*
+	 * Tarik: Allant du principe que les arbres seront espacés au minimum de 1 mètre,
+	 * Alors la distance minimale pour la MAJ de la position GPS doit être ainsi
+	 * 
+	 */
 	private static final long DISTANCE_MINIMALE_PrMAJ_LaPOSITION = 1; // en mètres
 	private static final long TEMPS_MINIMAL_PrMAJ_LaPOSITION = 1000; // en Millisecondes
 	protected LocationManager locationManager;
@@ -72,7 +78,6 @@ public class Navigation extends Activity implements SensorEventListener {
 		mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		mField = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 		text = (TextView) findViewById(R.id.textView3);
-		//text2 = (TextView) findViewById(R.id.textView4);
 		
 		//---------------------------------
 		/*Tarik: Géolocalisation */
@@ -82,6 +87,8 @@ public class Navigation extends Activity implements SensorEventListener {
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, TEMPS_MINIMAL_PrMAJ_LaPOSITION, DISTANCE_MINIMALE_PrMAJ_LaPOSITION,new MyLocationListener());
 		//Tarik: Affichage dynamique des positions (Sans que l'utilisateur ait à appuyer sur le bouton)
+		
+		/* On va le désactiver pr le moment
 		try {
 			showCurrentLocation(locationManager);
 		} catch (IOException e) {
@@ -94,6 +101,8 @@ public class Navigation extends Activity implements SensorEventListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
+		
 		//Tarik: Affichage statique (dans le cas où le dynamique soit quelque peut dysfonctionnel)/Tout Prévoir.com, lol
 		afficherPositionGeo.setOnClickListener(new OnClickListener() {
 			@Override
@@ -114,7 +123,6 @@ public class Navigation extends Activity implements SensorEventListener {
 			}
 		}); 
 		//----------------------------------
-		 //get the application's resources
 		
 	}   
 	
@@ -143,7 +151,8 @@ public class Navigation extends Activity implements SensorEventListener {
 			"Position Actuelle (Internet) \n Longitude: %1$s \n Latitude: %2$s",
 			locationNetwork.getLongitude(), locationNetwork.getLatitude()
 			);
-			Toast.makeText(Navigation.this, message,Toast.LENGTH_LONG).show();
+			
+			Toast.makeText(Navigation.this, message, Toast.LENGTH_LONG).show();
 			
 			String castedLong=String.valueOf(locationNetwork.getLongitude());
 			String castedLat=String.valueOf(locationNetwork.getLatitude());
@@ -163,6 +172,7 @@ public class Navigation extends Activity implements SensorEventListener {
 			"Position Actuelle GPS \n Longitude: %1$s \n Latitude: %2$s",
 			locationGPS.getLongitude(), locationGPS.getLatitude()
 			);
+			
 			Toast.makeText(Navigation.this, message, Toast.LENGTH_LONG).show();
 			
 			String castedLong=String.valueOf(locationGPS.getLongitude());
@@ -201,6 +211,23 @@ public class Navigation extends Activity implements SensorEventListener {
 			String message = String.format(
 			"Nouvelle Position \n Longitude: %1$s \n Latitude: %2$s", location.getLongitude(), location.getLatitude());
 			Toast.makeText(Navigation.this, message, Toast.LENGTH_LONG).show();
+			
+			String castedLong=String.valueOf(location.getLongitude());
+			String castedLat=String.valueOf(location.getLatitude());
+
+			//Tarik 25/04/2013: XML Hurray !
+			try {
+				findElement(castedLong,castedLat);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParserConfigurationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SAXException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		public void onStatusChanged(String s, int i, Bundle b) {
 			Toast.makeText(Navigation.this, "Changement d'état du GPS",
@@ -247,8 +274,6 @@ public class Navigation extends Activity implements SensorEventListener {
 		//On affiche la direction + azimut
 		text.setText( getDirectionFromDegrees(values[0])+" et l'azimut exact est:  "+ getExactAzimuthForXMLFile(values[0]));
 		
-		//Les valeurs en bruts
-		//text2.setText(String.format("Azimuth: %1$1.2f, Pitch: %2$1.2f, Roll: %3$1.2f", values[0], values[1], values[2]));
 	}
 	//--------------------------------------------------------------------------------------
 	//Tarik 23/04/2013: Petite phase de conversion pour avoir l'Azimuth à partir des Degrés
@@ -315,6 +340,7 @@ public class Navigation extends Activity implements SensorEventListener {
 	//On souhaite chopper l'arbre qui nous interesse en dépend de sa lat & long
 	public void findElement(String longitude, String latitude) throws IOException, ParserConfigurationException, SAXException
 	{
+		//Tarik 24/04/2013: On Charge notre petit XML pour le parser ensuite
 		InputStream raw = this.getApplicationContext().getAssets().open("XMLLocationData.xml");
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -328,18 +354,49 @@ public class Navigation extends Activity implements SensorEventListener {
         for (int i = 0; i < nodeList.getLength(); i++) {
 
             Node node = nodeList.item(i);
+            
             Element premierElement = (Element) node;
 
             NodeList latitudeListe = premierElement.getElementsByTagName("latitude");
+            NodeList longitudeListe = premierElement.getElementsByTagName("longitude");
+            NodeList informationListe = premierElement.getElementsByTagName("img");
             
             Element latitudeElement = (Element) latitudeListe.item(0);
+            Element longitudeElement = (Element) longitudeListe.item(0);
+            Element informationElement = (Element) informationListe.item(0);
+            
+            longitudeListe = longitudeElement.getChildNodes();
             latitudeListe = latitudeElement.getChildNodes();
+            informationListe = informationElement.getChildNodes();
             
             //On teste si ma latitude correspond à une enregistrée dans le XML
-            if (latitudeListe.item(0).getNodeValue().equals(latitude))
+            if (latitudeListe.item(0).getNodeValue().equals(latitude) && longitudeListe.item(0).getNodeValue().equals(longitude))
             {
-            	Toast.makeText(getApplicationContext(), 
-            			"Bingo, vous êtes bien à cette latitude qui est repertoriée dans cet XML est qui est "+latitudeListe.item(0).getNodeValue()+"\n La mienne est: "+latitude, Toast.LENGTH_SHORT).show();
+            	//Intent intent = new Intent(this, TreeInformation.class);
+    			//startActivity(intent);
+    			
+    			
+            	final Toast tag = Toast.makeText(getApplicationContext(), 
+            			"Bingo, dans le XML c'est cette lat/long \n"
+            					+"Infos: "+informationListe.item(0).getNodeValue()+ "\n"
+            					+"Lat: "+latitudeListe.item(0).getNodeValue()+ "\n"
+            					+"Long: " +latitudeListe.item(0).getNodeValue()+ "\n\n"
+            					
+            					+"\n Mes cordonnées sont: "
+            					+"Lat: "+latitude+"\n"
+            					+"Long: " + longitude+"\n",
+            					Toast.LENGTH_LONG);
+
+            	tag.show();
+            	//On l'affiche pdt 20 sec
+            	new CountDownTimer(20000, 1000)
+            	{
+
+            	    public void onTick(long millisUntilFinished) {tag.show();}
+            	    public void onFinish() {tag.show();}
+
+            	}.start();
+            	
             }
         }
 	}

@@ -27,5 +27,8 @@
         <string name="afficheLongLat_fr">Afficher Position</string>
         <string name="compass"></string>
         <string name="compass2"></string>
+        <string name="bingoText"></string>
+        <string name="treeDescription_fr"></string>
+        <string name="treeInformationTitle_fr">Informations Arbre</string>
 
 </resources>
