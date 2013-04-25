@@ -25,7 +25,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.sax.Element;
+import org.w3c.dom.Element;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -144,7 +144,7 @@ public class Navigation extends Activity implements SensorEventListener {
 			String castedLat=String.valueOf(locationNetwork.getLatitude());
 
 			//Tarik 25/04/2013: XML Hurray !
-			//findElement(castedLong,castedLat);
+			findElement(castedLong,castedLat);
 			
 			
 		}
@@ -164,7 +164,7 @@ public class Navigation extends Activity implements SensorEventListener {
 			String castedLat=String.valueOf(locationGPS.getLatitude());
 
 			//Tarik 25/04/2013: XML Hurray !
-			//findElement(castedLong,castedLat);
+			findElement(castedLong,castedLat);
 		}
 		else
 		{
@@ -310,8 +310,7 @@ public class Navigation extends Activity implements SensorEventListener {
 	//On souhaite chopper l'arbre qui nous interesse en dépend de sa lat & long
 	public void findElement(String longitude, String latitude) throws IOException, ParserConfigurationException, SAXException
 	{
-		InputStream raw = this.getApplicationContext().getAssets()
-                .open("XMLLocationData.xml");
+		InputStream raw = this.getApplicationContext().getAssets().open("XMLLocationData.xml");
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
@@ -323,14 +322,14 @@ public class Navigation extends Activity implements SensorEventListener {
         for (int i = 0; i < nodeList.getLength(); i++) {
 
             Node node = nodeList.item(i);
-            Element fstElmnt = (Element) node;
+            Element premierElement = (Element) node;
 
-            NodeList hotspotList = ((Document) fstElmnt).getElementsByTagName(longitude);
-            Element hotspotElement = (Element) hotspotList.item(0);
-            hotspotList = ((Node) hotspotElement).getChildNodes();
+            NodeList maListe = premierElement.getElementsByTagName("latitude");
+            
+            Element websiteElement = (Element) maListe.item(0);
+            maListe = websiteElement.getChildNodes();
 
-            Toast.makeText(getApplicationContext(),hotspotList.item(0).getNodeValue(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), maListe.item(0).getNodeValue(), Toast.LENGTH_SHORT).show();
         }
 	}
-
 }

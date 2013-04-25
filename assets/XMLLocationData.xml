@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <locationData>
 <hotspot>
-<id>1</id>
-<latitude>45.186555</latitude>
-<longitude>5.7449424</longitude>
-<azimuth>0</azimuth>
+	<id>1</id>
+	<latitude>45.186555</latitude>
+	<longitude>5.7449424</longitude>
+	<azimuth>0</azimuth>
+</hotspot>
+<hotspot>
+	<id>2</id>
+	<latitude>45.186553</latitude>
+	<longitude>5.7449423</longitude>
+	<azimuth>0</azimuth>
+</hotspot>
+<hotspot>
+	<id>3</id>
+	<latitude>45.186557</latitude>
+	<longitude>5.7449426</longitude>
+	<azimuth>0</azimuth>
 </hotspot>
 </locationData>
