@@ -1,5 +1,17 @@
 package botanical.main.activity;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,27 +25,29 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.sax.Element;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.mouddeneandroidproject.R;
 
 public class Navigation extends Activity implements SensorEventListener {
 	
 	/* Par Tarik: 22/04/2013 */
 	
+	/* Variables GEO */
 	private static final long DISTANCE_MINIMALE_PrMAJ_LaPOSITION = 1; // en mètres
 	private static final long TEMPS_MINIMAL_PrMAJ_LaPOSITION = 1000; // en Millisecondes
-	
 	protected LocationManager locationManager;
 	protected Button afficherPositionGeo;
 	
+	/* Variables COMPASS */
 	private SensorManager mSensorManager;
 	private Sensor mAccelerometer, mField;
-	private TextView text,text2;
-	
+	private TextView text;
 	private float[] mGravity;
 	private float[] mMagnetic;
 	
@@ -45,21 +59,25 @@ public class Navigation extends Activity implements SensorEventListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_navigation);
 		
+		//---------------------------------
 		/*Tarik: Boussole */
+		//---------------------------------
+		
 		mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
 		mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		mField = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 		text = (TextView) findViewById(R.id.textView3);
-		text2 = (TextView) findViewById(R.id.textView4);
+		//text2 = (TextView) findViewById(R.id.textView4);
 		
+		//---------------------------------
 		/*Tarik: Géolocalisation */
+		//---------------------------------
+		
 		afficherPositionGeo = (Button) findViewById(R.id.bouton_recup_coordGeo);
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, TEMPS_MINIMAL_PrMAJ_LaPOSITION, DISTANCE_MINIMALE_PrMAJ_LaPOSITION,new MyLocationListener());
-		
 		//Tarik: Affichage dynamique des positions (Sans que l'utilisateur ait à appuyer sur le bouton)
 		showCurrentLocation(locationManager);
-		
 		//Tarik: Affichage statique (dans le cas où le dynamique soit quelque peut dysfonctionnel)/Tout Prévoir.com, lol
 		afficherPositionGeo.setOnClickListener(new OnClickListener() {
 			@Override
@@ -67,7 +85,10 @@ public class Navigation extends Activity implements SensorEventListener {
 
 				showCurrentLocation(locationManager);
 			}
-		});       
+		}); 
+		//----------------------------------
+		 //get the application's resources
+		
 	}   
 	
 	/*----------------------------------
@@ -95,7 +116,34 @@ public class Navigation extends Activity implements SensorEventListener {
 			"Position Actuelle (Internet) \n Longitude: %1$s \n Latitude: %2$s",
 			locationNetwork.getLongitude(), locationNetwork.getLatitude()
 			);
-			Toast.makeText(Navigation.this, message,Toast.LENGTH_LONG).show();	
+			Toast.makeText(Navigation.this, message,Toast.LENGTH_LONG).show();
+			
+			/*
+			try {
+	            InputStream raw = this.getApplicationContext().getAssets().open("maths.xml");
+
+	            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+	            DocumentBuilder db = dbf.newDocumentBuilder();
+
+	            Document doc = db.parse(raw);
+	            doc.getDocumentElement().normalize();
+	            NodeList nodeList = doc.getElementsByTagName("mathametician");
+
+	            for (int i = 0; i < nodeList.getLength(); i++) {
+
+	                Node node = nodeList.item(i);
+	                Element fstElmnt = (Element) node;
+
+	                NodeList websiteList = fstElmnt.getElementsByTagName("age");
+	                Element websiteElement = (Element) websiteList.item(0);
+	                websiteList = websiteElement.getChildNodes();
+
+	                Toast.makeText(getApplicationContext(),
+	                        websiteList.item(0).getNodeValue(), Toast.LENGTH_SHORT)
+	                        .show();
+	            }			
+			*/
+			
 		}
 		//Si GPS est inactif et Web est inactif aussi -> On se basera évidemment sur le GPS
 		else if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
@@ -137,12 +185,9 @@ public class Navigation extends Activity implements SensorEventListener {
 		
 		public void onLocationChanged(Location location) {
 			String message = String.format(
-			"Nouvelle Position \n Longitude: %1$s \n Latitude: %2$s",
-			location.getLongitude(), location.getLatitude()
-			);
+			"Nouvelle Position \n Longitude: %1$s \n Latitude: %2$s", location.getLongitude(), location.getLatitude());
 			Toast.makeText(Navigation.this, message, Toast.LENGTH_LONG).show();
 		}
-		
 		public void onStatusChanged(String s, int i, Bundle b) {
 			Toast.makeText(Navigation.this, "Changement d'état du GPS",
 			Toast.LENGTH_LONG).show();
@@ -175,23 +220,21 @@ public class Navigation extends Activity implements SensorEventListener {
 	{
 		float[] temp = new float[9];
 		float[] R = new float[9];
-		//Load rotation matrix into R
 		SensorManager.getRotationMatrix(temp, null, mGravity, mMagnetic);
-		//Remap to camera's point-of-view
 		SensorManager.remapCoordinateSystem(temp, SensorManager.AXIS_X, SensorManager.AXIS_Z, R);
-		//Return the orientation values
 		float[] values = new float[3];
 		SensorManager.getOrientation(R, values);
-		//Convert to degrees
+		
+		//On convertit aux degrés
 		for (int i=0; i < values.length; i++) {
 			Double degrees = (values[i] * 180) / Math.PI;
 			values[i] = degrees.floatValue();
 		}
-		//Display the compass direction
-		text.setText( getDirectionFromDegrees(values[0]) );
-		//Display the raw values
-		text2.setText(String.format("Azimuth: %1$1.2f, Pitch: %2$1.2f, Roll: %3$1.2f",
-		values[0], values[1], values[2]));
+		//On affiche la direction + azimut
+		text.setText( getDirectionFromDegrees(values[0])+" et l'azimut exact est:  "+ getExactAzimuthForXMLFile(values[0]));
+		
+		//Les valeurs en bruts
+		//text2.setText(String.format("Azimuth: %1$1.2f, Pitch: %2$1.2f, Roll: %3$1.2f", values[0], values[1], values[2]));
 	}
 	//--------------------------------------------------------------------------------------
 	//Tarik 23/04/2013: Petite phase de conversion pour avoir l'Azimuth à partir des Degrés
@@ -209,6 +252,12 @@ public class Navigation extends Activity implements SensorEventListener {
 
 		return null;
 	}
+	//Tarik 25/04/2013: Affiche que l'azimut
+	private float getExactAzimuthForXMLFile(float degrees)
+	{
+		return degrees;
+	}
+	
 	//----------------------------------------------------------------
 	//Tarik 23/04/2013 : Compass Listeners
 	//----------------------------------------------------------------
@@ -225,7 +274,6 @@ public class Navigation extends Activity implements SensorEventListener {
 	}
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		
 	}
 	@Override
 	public void onSensorChanged(SensorEvent event) 
@@ -246,5 +294,38 @@ public class Navigation extends Activity implements SensorEventListener {
 		}
 	}
 	//----------------------------------------------------------------
+	
+	/*----------------------------------
+	------------------------------------
+	//TARIK: METHODES DE XML Reading
+	------------------------------------
+	-----------------------------------*/
+	
+	public void findElement(String longitude, String latitude) throws IOException, ParserConfigurationException, SAXException
+	{
+		InputStream raw = this.getApplicationContext().getAssets()
+                .open("XMLLocationData.xml");
+
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+
+        Document doc = db.parse(raw);
+        doc.getDocumentElement().normalize();
+        NodeList nodeList = doc.getElementsByTagName("hotspot");
+
+        for (int i = 0; i < nodeList.getLength(); i++) {
+
+            Node node = nodeList.item(i);
+            Element fstElmnt = (Element) node;
+
+            NodeList hotspotList = ((Document) fstElmnt).getElementsByTagNameNS(longitude,latitude);
+            Element hotspotElement = (Element) hotspotList.item(0);
+            hotspotList = ((Node) hotspotElement).getChildNodes();
+
+            Toast.makeText(getApplicationContext(),
+            		hotspotList.item(0).getNodeValue(), Toast.LENGTH_SHORT)
+                    .show();
+	}
+	}
 
 }

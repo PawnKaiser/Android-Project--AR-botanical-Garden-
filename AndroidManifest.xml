@@ -12,6 +12,8 @@
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     
     <application
         android:allowBackup="true"
@@ -32,21 +34,6 @@
             android:label="@string/title_activity_navigation" >
         </activity>
 
-        <receiver
-            android:name="botanical.main.broadcastReceiver.NavigationBR"
-            android:enabled="true"
-            android:exported="true" >
-            <intent-filter>
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </receiver>
-
-        <provider
-            android:name="botanical.main.contentProvider.XMLContentProvider"
-            android:authorities="botanical.main.contentProvider.XMLContentProvider"
-            android:enabled="true"
-            android:exported="true" >
-        </provider>
     </application>
 
 </manifest>
