@@ -1,3 +1,8 @@
+/* Initially created by Mehdi Moudden and developped by Tarik Gilani *
+ * M1 Miage - April 2013
+ * 
+ */
+
 package botanical.main.activity;
 
 import java.io.IOException;
@@ -319,17 +324,23 @@ public class Navigation extends Activity implements SensorEventListener {
         doc.getDocumentElement().normalize();
         NodeList nodeList = doc.getElementsByTagName("hotspot");
 
+        //On parcourt
         for (int i = 0; i < nodeList.getLength(); i++) {
 
             Node node = nodeList.item(i);
             Element premierElement = (Element) node;
 
-            NodeList maListe = premierElement.getElementsByTagName("latitude");
+            NodeList latitudeListe = premierElement.getElementsByTagName("latitude");
             
-            Element websiteElement = (Element) maListe.item(0);
-            maListe = websiteElement.getChildNodes();
-
-            Toast.makeText(getApplicationContext(), maListe.item(0).getNodeValue(), Toast.LENGTH_SHORT).show();
+            Element latitudeElement = (Element) latitudeListe.item(0);
+            latitudeListe = latitudeElement.getChildNodes();
+            
+            //On teste si ma latitude correspond à une enregistrée dans le XML
+            if (latitudeListe.item(0).getNodeValue().equals(latitude))
+            {
+            	Toast.makeText(getApplicationContext(), 
+            			"Bingo, vous êtes bien à cette latitude qui est repertoriée dans cet XML est qui est "+latitudeListe.item(0).getNodeValue()+"\n La mienne est: "+latitude, Toast.LENGTH_SHORT).show();
+            }
         }
 	}
 }
