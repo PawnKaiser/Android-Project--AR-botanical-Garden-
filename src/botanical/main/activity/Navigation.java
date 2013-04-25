@@ -77,13 +77,35 @@ public class Navigation extends Activity implements SensorEventListener {
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, TEMPS_MINIMAL_PrMAJ_LaPOSITION, DISTANCE_MINIMALE_PrMAJ_LaPOSITION,new MyLocationListener());
 		//Tarik: Affichage dynamique des positions (Sans que l'utilisateur ait à appuyer sur le bouton)
-		showCurrentLocation(locationManager);
+		try {
+			showCurrentLocation(locationManager);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//Tarik: Affichage statique (dans le cas où le dynamique soit quelque peut dysfonctionnel)/Tout Prévoir.com, lol
 		afficherPositionGeo.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 
-				showCurrentLocation(locationManager);
+				try {
+					showCurrentLocation(locationManager);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ParserConfigurationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SAXException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}); 
 		//----------------------------------
@@ -101,7 +123,7 @@ public class Navigation extends Activity implements SensorEventListener {
 	/* Tarik 23/04/2013 : Méthode pour afficher la position actuelle */
 	//----------------------------------------------------------------
 	
-	protected void showCurrentLocation(LocationManager locationManager) 
+	protected void showCurrentLocation(LocationManager locationManager) throws IOException, ParserConfigurationException, SAXException 
 	{
 		/* Par Tarik: Si le GPS est désactivé mais par un miracle quelconque
 		* on arrive à chopper le Wifi à l'arboretum (Esprit visionnaire quand tu nous tiens...)
@@ -118,31 +140,12 @@ public class Navigation extends Activity implements SensorEventListener {
 			);
 			Toast.makeText(Navigation.this, message,Toast.LENGTH_LONG).show();
 			
-			/*
-			try {
-	            InputStream raw = this.getApplicationContext().getAssets().open("maths.xml");
+			String castedLong=String.valueOf(locationNetwork.getLongitude());
+			String castedLat=String.valueOf(locationNetwork.getLatitude());
 
-	            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-	            DocumentBuilder db = dbf.newDocumentBuilder();
-
-	            Document doc = db.parse(raw);
-	            doc.getDocumentElement().normalize();
-	            NodeList nodeList = doc.getElementsByTagName("mathametician");
-
-	            for (int i = 0; i < nodeList.getLength(); i++) {
-
-	                Node node = nodeList.item(i);
-	                Element fstElmnt = (Element) node;
-
-	                NodeList websiteList = fstElmnt.getElementsByTagName("age");
-	                Element websiteElement = (Element) websiteList.item(0);
-	                websiteList = websiteElement.getChildNodes();
-
-	                Toast.makeText(getApplicationContext(),
-	                        websiteList.item(0).getNodeValue(), Toast.LENGTH_SHORT)
-	                        .show();
-	            }			
-			*/
+			//Tarik 25/04/2013: XML Hurray !
+			//findElement(castedLong,castedLat);
+			
 			
 		}
 		//Si GPS est inactif et Web est inactif aussi -> On se basera évidemment sur le GPS
@@ -156,6 +159,12 @@ public class Navigation extends Activity implements SensorEventListener {
 			locationGPS.getLongitude(), locationGPS.getLatitude()
 			);
 			Toast.makeText(Navigation.this, message, Toast.LENGTH_LONG).show();
+			
+			String castedLong=String.valueOf(locationGPS.getLongitude());
+			String castedLat=String.valueOf(locationGPS.getLatitude());
+
+			//Tarik 25/04/2013: XML Hurray !
+			//findElement(castedLong,castedLat);
 		}
 		else
 		{
@@ -318,14 +327,12 @@ public class Navigation extends Activity implements SensorEventListener {
             Node node = nodeList.item(i);
             Element fstElmnt = (Element) node;
 
-            NodeList hotspotList = ((Document) fstElmnt).getElementsByTagNameNS(longitude,latitude);
+            NodeList hotspotList = ((Document) fstElmnt).getElementsByTagName(longitude);
             Element hotspotElement = (Element) hotspotList.item(0);
             hotspotList = ((Node) hotspotElement).getChildNodes();
 
-            Toast.makeText(getApplicationContext(),
-            		hotspotList.item(0).getNodeValue(), Toast.LENGTH_SHORT)
-                    .show();
-	}
+            Toast.makeText(getApplicationContext(),hotspotList.item(0).getNodeValue(), Toast.LENGTH_SHORT).show();
+        }
 	}
 
 }
