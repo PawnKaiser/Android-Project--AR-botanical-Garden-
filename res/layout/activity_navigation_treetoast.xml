@@ -5,7 +5,7 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
               android:padding="10dp"
-              android:background="#33FF33"
+              android:background="#FFF"
               >
 
     <ImageView
@@ -19,6 +19,6 @@
         	  android:textIsSelectable="true"
               android:layout_width="wrap_content"
               android:layout_height="fill_parent"
-              android:textColor="#FFF"
+              android:textColor="#000"
               />
 </LinearLayout>

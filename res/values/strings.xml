@@ -32,5 +32,6 @@
         <string name="treeInformationTitle_fr">Informations Arbre</string>
         <string name="tree_img"></string>
         <string name="arbre_img"></string>
+        <string name="geoPosition_fr"></string>
 
 </resources>

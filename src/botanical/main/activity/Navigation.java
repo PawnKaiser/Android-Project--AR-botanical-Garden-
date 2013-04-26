@@ -40,6 +40,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,8 +68,8 @@ public class Navigation extends Activity implements SensorEventListener {
 	 * pas les mêmes cordonnées, donc, il faut prendre cet aspect en 
 	 * compte.
 	 */
-	private static final double BORNE_INCERTITUDE_MIN_POSITION = 0.0000500;
-	private static final double BORNE_INCERTITUDE_MAX_POSITION = 0.0000500;
+	private static final double BORNE_INCERTITUDE_MIN_POSITION = 0.0000800;
+	private static final double BORNE_INCERTITUDE_MAX_POSITION = 0.0000800;
 	
 	
 	protected LocationManager locationManager;
@@ -78,7 +81,7 @@ public class Navigation extends Activity implements SensorEventListener {
 	/* Variables COMPASS */
 	private SensorManager mSensorManager;
 	private Sensor mAccelerometer, mField;
-	private TextView text;
+	private TextView text,geoPosition;
 	private float[] mGravity;
 	private float[] mMagnetic;
 	
@@ -115,6 +118,8 @@ public class Navigation extends Activity implements SensorEventListener {
 		//---------------------------------
 		
 		afficherPositionGeo = (Button) findViewById(R.id.bouton_recup_coordGeo);
+		geoPosition = (TextView) findViewById(R.id.textView5);
+		
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, TEMPS_MINIMAL_PrMAJ_LaPOSITION, DISTANCE_MINIMALE_PrMAJ_LaPOSITION,new MyLocationListener());
 		
@@ -182,7 +187,9 @@ public class Navigation extends Activity implements SensorEventListener {
 			locationNetwork.getLongitude(), locationNetwork.getLatitude()
 			);
 			
-			Toast.makeText(Navigation.this, message, Toast.LENGTH_LONG).show();
+			//Toast.makeText(Navigation.this, message, Toast.LENGTH_LONG).show();
+			geoPosition.setText(message);
+			
 			
 			String castedLong=String.valueOf(locationNetwork.getLongitude());
 			String castedLat=String.valueOf(locationNetwork.getLatitude());
@@ -203,7 +210,8 @@ public class Navigation extends Activity implements SensorEventListener {
 			locationGPS.getLongitude(), locationGPS.getLatitude()
 			);
 			
-			Toast.makeText(Navigation.this, message, Toast.LENGTH_LONG).show();
+			//Toast.makeText(Navigation.this, message, Toast.LENGTH_LONG).show();
+			geoPosition.setText(message);
 			
 			String castedLong=String.valueOf(locationGPS.getLongitude());
 			String castedLat=String.valueOf(locationGPS.getLatitude());
@@ -360,6 +368,36 @@ public class Navigation extends Activity implements SensorEventListener {
 		}
 	}
 	//----------------------------------------------------------------
+	//Tarik 26/04/2013 : Temps d'affichage de notre toast en dépend
+	// de la longueur du texte relatif à notre arbre
+	//----------------------------------------------------------------
+	public int tempsNecessaireALaLecture(String text)
+	{
+		int temps = 0;
+		
+		if (text.length() <= 100)
+			temps = 5000;
+		else if (text.length() > 100 && text.length() <= 200)
+			temps = 12000;
+		else if (text.length() > 200 && text.length() <= 300)
+			temps = 17000;
+		else if (text.length() > 300 && text.length() <= 400)
+			temps = 22000;
+		else if (text.length() > 400 && text.length() <= 500)
+			temps = 27000;
+		else if (text.length() > 500 && text.length() <= 600)
+			temps = 35000;
+		else if (text.length() > 600 && text.length() <= 700)
+			temps = 40000;
+		else if (text.length() > 700 && text.length() <= 800)
+			temps = 50000;
+		else
+			temps = 100000;
+		
+		
+		return temps;
+	}
+	//----------------------------------------------------------------
 	
 	/*----------------------------------
 	------------------------------------
@@ -443,24 +481,38 @@ public class Navigation extends Activity implements SensorEventListener {
                 image.setImageResource(treeResID);
                 
                 TextView text = (TextView) layout.findViewById(R.id.text);
-                text.setText(titreListe.item(0).getNodeValue()+"\n\n"+infoListe.item(0).getNodeValue());
+                text.setText(titreListe.item(0).getNodeValue()+"\n\n"+ "\n" + infoListe.item(0).getNodeValue());
 
                 final Toast toast = new Toast(getApplicationContext());
                 toast.setView(layout);
-                toast.setDuration(Toast.LENGTH_LONG);
-
-                /*Bah là on définit le temps de l'affichage de l'info de l'arbre
-                 * (je ferai une méthode un chuia plus tard qui calcule le nombre de lettres dans le texte
-                 * pour connaître le temps nécessaire en secondes pour déterminer l'affichage de la popup
+                
+                
+            	
+            	/* Tarik 26/04/2013: Bah là on définit le temps de l'affichage de l'info de l'arbre
+                 * Sur une base expérimentale faite avec mes soins qui affiche le texte avec le temps
+                 * nécessaire pour le lire en dépend de sa longueur, en partant sur une base de 1sec=1000 milsec
                  * 
                  */
                 
-                new CountDownTimer(9000, 1000)
+                new CountDownTimer(tempsNecessaireALaLecture(infoListe.item(0).getNodeValue()), 1000)
                 {
-
-                    public void onTick(long millisUntilFinished) {toast.show();}
-                    public void onFinish() {toast.show();}
-
+                    public void onTick(long millisUntilFinished) 
+                    {
+                    	toast.show();
+                    	
+                    	//On cache le spinner quand on trouve notre arbre
+                    	ProgressBar pg = (ProgressBar) findViewById(R.id.progressBar1);
+                        pg.setVisibility(View.INVISIBLE);
+                    	
+                    }
+                    public void onFinish() 
+                    {
+                    	toast.show();
+                    	
+                    	//On cache le spinner quand on trouve notre arbre
+                    	ProgressBar pg = (ProgressBar) findViewById(R.id.progressBar1);
+                        pg.setVisibility(View.INVISIBLE);
+                    }
                 }.start();
             	
             }
