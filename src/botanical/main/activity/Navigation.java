@@ -17,8 +17,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -29,19 +27,19 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.provider.Settings;
 import org.w3c.dom.Element;
 
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,7 +47,9 @@ import com.example.gp1androidproject.R;
 
 public class Navigation extends Activity implements SensorEventListener {
 	
-	/* Par Tarik: 22/04/2013 */
+	/*-----------------------------------------------------
+	Par Tarik Gilani : Entre le 22/04/2013 et Début Mai 13
+	------------------------------------------------------*/
 	
 	/* Variables GEO */
 	/*
@@ -59,8 +59,21 @@ public class Navigation extends Activity implements SensorEventListener {
 	 */
 	private static final long DISTANCE_MINIMALE_PrMAJ_LaPOSITION = 1; // en mètres
 	private static final long TEMPS_MINIMAL_PrMAJ_LaPOSITION = 1000; // en Millisecondes
+	
+	/* Tarik: Il y aura une incertitude au niveau de la géolocalisation,
+	 * Car même étant sur le même point géographique, la nexus ne rendra 
+	 * pas les mêmes cordonnées, donc, il faut prendre cet aspect en 
+	 * compte.
+	 */
+	private static final double BORNE_INCERTITUDE_MIN_POSITION = 0.0000500;
+	private static final double BORNE_INCERTITUDE_MAX_POSITION = 0.0000500;
+	
+	
 	protected LocationManager locationManager;
 	protected Button afficherPositionGeo;
+
+	private String xmlLatitude;
+	private String xmlLongitude;
 	
 	/* Variables COMPASS */
 	private SensorManager mSensorManager;
@@ -80,6 +93,14 @@ public class Navigation extends Activity implements SensorEventListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_navigation);
 		
+		
+		//---------------------------------
+		/*Tarik: Musique */
+		//---------------------------------
+		
+		//MediaPlayer mp = MediaPlayer.create(getBaseContext(), R.raw.gp1ar_maintracksfx);
+		//mp.start();
+		
 		//---------------------------------
 		/*Tarik: Boussole */
 		//---------------------------------
@@ -96,9 +117,8 @@ public class Navigation extends Activity implements SensorEventListener {
 		afficherPositionGeo = (Button) findViewById(R.id.bouton_recup_coordGeo);
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, TEMPS_MINIMAL_PrMAJ_LaPOSITION, DISTANCE_MINIMALE_PrMAJ_LaPOSITION,new MyLocationListener());
-		//Tarik: Affichage dynamique des positions (Sans que l'utilisateur ait à appuyer sur le bouton)
 		
-		/* On va le désactiver pr le moment
+		//Tarik: Affichage dynamique des positions (Sans que l'utilisateur ait à appuyer sur le bouton)
 		try {
 			showCurrentLocation(locationManager);
 		} catch (IOException e) {
@@ -111,7 +131,7 @@ public class Navigation extends Activity implements SensorEventListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		*/
+
 		
 		//Tarik: Affichage statique (dans le cas où le dynamique soit quelque peut dysfonctionnel)/Tout Prévoir.com, lol
 		afficherPositionGeo.setOnClickListener(new OnClickListener() {
@@ -346,9 +366,9 @@ public class Navigation extends Activity implements SensorEventListener {
 	//TARIK: METHODES DE XML Reading
 	------------------------------------
 	-----------------------------------*/
-	
+
 	//Tarik (26/04/2013): On souhaite chopper l'arbre qui nous interesse en dépend de sa lat & long
-	public void findElement(String longitude, String latitude) throws IOException, ParserConfigurationException, SAXException
+	public void findElement(String maLongitudeActuelle, String maLatitudeActuelle) throws IOException, ParserConfigurationException, SAXException
 	{
 		//Tarik 24/04/2013: On Charge notre petit XML pour le parser ensuite
 		InputStream raw = this.getApplicationContext().getAssets().open("XMLLocationData.xml");
@@ -360,18 +380,20 @@ public class Navigation extends Activity implements SensorEventListener {
         doc.getDocumentElement().normalize();
         NodeList nodeList = doc.getElementsByTagName("hotspot");
 
-        //On parcourt
+        //Tarik 24/04/2013: On parcourt notre 'tit XML bien sympathique
         for (int i = 0; i < nodeList.getLength(); i++) {
 
             Node node = nodeList.item(i);
             
             Element premierElement = (Element) node;
 
+            NodeList titreListe = premierElement.getElementsByTagName("title");
+            NodeList infoListe = premierElement.getElementsByTagName("information");
             NodeList latitudeListe = premierElement.getElementsByTagName("latitude");
             NodeList longitudeListe = premierElement.getElementsByTagName("longitude");
             NodeList imgListe = premierElement.getElementsByTagName("img");
-            NodeList infoListe = premierElement.getElementsByTagName("information");
             
+            Element titreElement = (Element) titreListe.item(0);
             Element latitudeElement = (Element) latitudeListe.item(0);
             Element longitudeElement = (Element) longitudeListe.item(0);
             Element imgElement = (Element) imgListe.item(0);
@@ -381,13 +403,37 @@ public class Navigation extends Activity implements SensorEventListener {
             latitudeListe = latitudeElement.getChildNodes();
             imgListe = imgElement.getChildNodes();
             infoListe = infoElement.getChildNodes();
+            titreListe = titreElement.getChildNodes();
             
-            //On teste si ma latitude correspond à une enregistrée dans le XML
-            if (latitudeListe.item(0).getNodeValue().equals(latitude) && longitudeListe.item(0).getNodeValue().equals(longitude))
+            /* Tarik: On teste si mes coords géo correspondent à une enregistrée dans le XML 
+             * Mais on convertit d'abord
+             * 
+             */
+            
+            //Pr Tester la différence (Incertitude géographique), on convertit nos strings en double
+            
+            xmlLatitude = latitudeListe.item(0).getNodeValue();
+            xmlLongitude = longitudeListe.item(0).getNodeValue();
+            
+            //Cordonnées de notre Arbre d'abord
+            double xmlTempDoubleLatitude = Double.parseDouble(xmlLatitude);
+            double xmlTempDoubleLongitude = Double.parseDouble(xmlLongitude);
+            
+            //Ensuite les miennes
+            double myTempDoubleLatitude = Double.parseDouble(maLatitudeActuelle);
+            double myTempDoubleLongitude = Double.parseDouble(maLongitudeActuelle);
+            
+            
+            if ((xmlLatitude.equals(maLatitudeActuelle) && xmlLongitude.equals(maLongitudeActuelle)) 
+            || 
+            ((myTempDoubleLatitude - BORNE_INCERTITUDE_MIN_POSITION <= xmlTempDoubleLatitude && xmlTempDoubleLatitude <= myTempDoubleLatitude + BORNE_INCERTITUDE_MAX_POSITION) 
+            && 
+            (myTempDoubleLongitude - BORNE_INCERTITUDE_MIN_POSITION <= xmlTempDoubleLongitude && xmlTempDoubleLongitude <= myTempDoubleLongitude + BORNE_INCERTITUDE_MAX_POSITION)) )
             {		
                 //ImageView imageView = (ImageView) findViewById(R.id.imageView1);
                 int treeResID = getResources().getIdentifier(imgListe.item(0).getNodeValue(), "drawable", getPackageName());
                 //imageView.setImageResource(treeResID);
+                
                 
                 LayoutInflater inflater = getLayoutInflater();
                 View layout = inflater.inflate(R.layout.activity_navigation_treetoast,
@@ -395,24 +441,27 @@ public class Navigation extends Activity implements SensorEventListener {
 
                 ImageView image = (ImageView) layout.findViewById(R.id.image);
                 image.setImageResource(treeResID);
+                
                 TextView text = (TextView) layout.findViewById(R.id.text);
-                text.setText(infoListe.item(0).getNodeValue());
+                text.setText(titreListe.item(0).getNodeValue()+"\n\n"+infoListe.item(0).getNodeValue());
 
-                Toast toast = new Toast(getApplicationContext());
+                final Toast toast = new Toast(getApplicationContext());
                 toast.setView(layout);
                 toast.setDuration(Toast.LENGTH_LONG);
-                toast.show();
+
+                /*Bah là on définit le temps de l'affichage de l'info de l'arbre
+                 * (je ferai une méthode un chuia plus tard qui calcule le nombre de lettres dans le texte
+                 * pour connaître le temps nécessaire en secondes pour déterminer l'affichage de la popup
+                 * 
+                 */
                 
-                /*
-                text.setText("Bingo, dans le XML c'est cette lat/long \n"
-    					+"img: "+ informationListe.item(0).getNodeValue()+"\n"
-    					+"Lat: "+latitudeListe.item(0).getNodeValue()+ "\n"
-    					+"Long: " +latitudeListe.item(0).getNodeValue()+ "\n\n"
-    					
-    					+"\n Mes cordonnées sont: "
-    					+"Lat: "+latitude+"\n"
-    					+"Long: " + longitude+"\n");
-                */
+                new CountDownTimer(9000, 1000)
+                {
+
+                    public void onTick(long millisUntilFinished) {toast.show();}
+                    public void onFinish() {toast.show();}
+
+                }.start();
             	
             }
         }

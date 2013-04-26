@@ -2,29 +2,29 @@
 <locationData>
 <hotspot>
 	<id>1</id>
-	<latitude>45.1865558</latitude>
-	<longitude>5.7449424</longitude>
-	<title>Sapin</title>
+	<title>Baobab</title>
+	<information>Très grand arbre africain</information>
+	<latitude>45.1861000</latitude>
+	<longitude>5.7442000</longitude>
 	<azimuth>0</azimuth>
-	<information>ras</information>
 	<img>ras</img>
 </hotspot>
 <hotspot>
 	<id>2</id>
+	<title>Sapin</title>
+	<information>Petit Arbre Européen très joli</information>
 	<latitude>45.1865558</latitude>
 	<longitude>5.7449838</longitude>
 	<azimuth>0</azimuth>
-	<title>Sapin</title>
-	<information>Un sacré conifère cuilà</information>
 	<img>sapin</img>	
 </hotspot>
 <hotspot>
 	<id>3</id>
-	<latitude>45.1111111</latitude>
-	<longitude>5.7448932</longitude>
+	<title>Sequoia</title>
+	<information>Grand arbre Canadien</information>
+	<latitude>45.1860000</latitude>
+	<longitude>5.7449400</longitude>
 	<azimuth>0</azimuth>
-	<title>Sapin</title>
-	<information>ras</information>
 	<img>ras</img>
 </hotspot>
 </locationData>
