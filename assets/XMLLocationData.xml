@@ -4,6 +4,7 @@
 	<id>1</id>
 	<latitude>45.1865558</latitude>
 	<longitude>5.7449424</longitude>
+	<title>Sapin</title>
 	<azimuth>0</azimuth>
 	<information>ras</information>
 	<img>ras</img>
@@ -22,6 +23,7 @@
 	<latitude>45.1111111</latitude>
 	<longitude>5.7448932</longitude>
 	<azimuth>0</azimuth>
+	<title>Sapin</title>
 	<information>ras</information>
 	<img>ras</img>
 </hotspot>

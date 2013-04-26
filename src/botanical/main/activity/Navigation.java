@@ -5,7 +5,7 @@
 
 package botanical.main.activity;
 
-import java.io.File;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -18,13 +18,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -34,12 +31,14 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.os.Environment;
 import android.provider.Settings;
 import org.w3c.dom.Element;
+
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -348,7 +347,7 @@ public class Navigation extends Activity implements SensorEventListener {
 	------------------------------------
 	-----------------------------------*/
 	
-	//On souhaite chopper l'arbre qui nous interesse en dépend de sa lat & long
+	//Tarik (26/04/2013): On souhaite chopper l'arbre qui nous interesse en dépend de sa lat & long
 	public void findElement(String longitude, String latitude) throws IOException, ParserConfigurationException, SAXException
 	{
 		//Tarik 24/04/2013: On Charge notre petit XML pour le parser ensuite
@@ -370,26 +369,39 @@ public class Navigation extends Activity implements SensorEventListener {
 
             NodeList latitudeListe = premierElement.getElementsByTagName("latitude");
             NodeList longitudeListe = premierElement.getElementsByTagName("longitude");
-            NodeList informationListe = premierElement.getElementsByTagName("img");
+            NodeList imgListe = premierElement.getElementsByTagName("img");
+            NodeList infoListe = premierElement.getElementsByTagName("information");
             
             Element latitudeElement = (Element) latitudeListe.item(0);
             Element longitudeElement = (Element) longitudeListe.item(0);
-            Element informationElement = (Element) informationListe.item(0);
+            Element imgElement = (Element) imgListe.item(0);
+            Element infoElement = (Element) infoListe.item(0);
             
             longitudeListe = longitudeElement.getChildNodes();
             latitudeListe = latitudeElement.getChildNodes();
-            informationListe = informationElement.getChildNodes();
+            imgListe = imgElement.getChildNodes();
+            infoListe = infoElement.getChildNodes();
             
             //On teste si ma latitude correspond à une enregistrée dans le XML
             if (latitudeListe.item(0).getNodeValue().equals(latitude) && longitudeListe.item(0).getNodeValue().equals(longitude))
-            {
-            	//Intent intent = new Intent(this, TreeInformation.class);
-    			//startActivity(intent);
-            	
-            	
-                ImageView imageView = (ImageView) findViewById(R.id.imageView1);
-                int resId = getResources().getIdentifier(informationListe.item(0).getNodeValue(), "drawable", getPackageName());
-                imageView.setImageResource(resId);
+            {		
+                //ImageView imageView = (ImageView) findViewById(R.id.imageView1);
+                int treeResID = getResources().getIdentifier(imgListe.item(0).getNodeValue(), "drawable", getPackageName());
+                //imageView.setImageResource(treeResID);
+                
+                LayoutInflater inflater = getLayoutInflater();
+                View layout = inflater.inflate(R.layout.activity_navigation_treetoast,
+                                               (ViewGroup) findViewById(R.id.toast_layout_root));
+
+                ImageView image = (ImageView) layout.findViewById(R.id.image);
+                image.setImageResource(treeResID);
+                TextView text = (TextView) layout.findViewById(R.id.text);
+                text.setText(infoListe.item(0).getNodeValue());
+
+                Toast toast = new Toast(getApplicationContext());
+                toast.setView(layout);
+                toast.setDuration(Toast.LENGTH_LONG);
+                toast.show();
                 
                 /*
                 text.setText("Bingo, dans le XML c'est cette lat/long \n"
