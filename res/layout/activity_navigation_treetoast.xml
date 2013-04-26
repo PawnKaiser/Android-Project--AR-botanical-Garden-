@@ -5,7 +5,7 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
               android:padding="10dp"
-              android:background="#FFF"
+              android:background="@drawable/toast_border"
               >
 
     <ImageView
@@ -19,6 +19,7 @@
         	  android:textIsSelectable="true"
               android:layout_width="wrap_content"
               android:layout_height="fill_parent"
-              android:textColor="#000"
+              android:textColor="#fff"
               />
+    
 </LinearLayout>

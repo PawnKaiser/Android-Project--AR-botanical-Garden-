@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
@@ -11,6 +11,15 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".Navigation" >
 
+    <ImageView
+        android:id="@+id/audioIcon"
+        android:layout_width="52dp"
+        android:layout_height="42dp"
+        android:src="@drawable/audio"
+        android:contentDescription="@string/audio_icon"
+        android:visibility="invisible"
+         />
+
     <Button
         android:id="@+id/bouton_recup_coordGeo"
         android:layout_width="wrap_content"
@@ -22,7 +31,8 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_alignRight="@+id/textView2"
+        android:layout_below="@+id/bouton_recup_coordGeo"
         android:text="@string/textDetection_fr"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -30,34 +40,53 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/bouton_recup_coordGeo"
+        android:layout_below="@+id/textView1"
         android:text="@string/advice_fr"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textSize="14sp" />
 
     <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
+        android:id="@+id/TextView01"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/compass" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/TitleSplashScreen_fr"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="36sp" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView3"
+        android:layout_below="@+id/textView3"
         android:text="@string/geoPosition_fr" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/compass2" />
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_below="@+id/textView2"
+        android:text="@string/compass" />
 
     <ProgressBar
         android:id="@+id/progressBar1"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/TextView01"
+        android:layout_marginTop="26dp"
+        android:layout_toRightOf="@+id/textView1" />
 
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView3"
+        android:layout_alignTop="@+id/textView2"
+        android:text="@string/compass2" />
     
-    
-</LinearLayout>
+</RelativeLayout>

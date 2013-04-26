@@ -1,13 +1,14 @@
 /* Initially created by Mehdi Moudden and developped by Tarik Gilani *
- * M1 Miage - April 2013
- * 
- */
+* M1 Miage - April 2013
+* 
+*/
 
 package botanical.main.activity;
 
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,6 +18,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -32,7 +34,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.Settings;
+import android.speech.tts.TextToSpeech;
+
 import org.w3c.dom.Element;
+
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,15 +45,14 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gp1androidproject.R;
 
-public class Navigation extends Activity implements SensorEventListener {
+@SuppressLint("ShowToast")
+public class Navigation extends Activity implements SensorEventListener,TextToSpeech.OnInitListener {
 	
 	/*-----------------------------------------------------
 	Par Tarik Gilani : Entre le 22/04/2013 et Début Mai 13
@@ -56,22 +60,40 @@ public class Navigation extends Activity implements SensorEventListener {
 	
 	/* Variables GEO */
 	/*
-	 * Tarik: Allant du principe que les arbres seront espacés au minimum de 1 mètre,
-	 * Alors la distance minimale pour la MAJ de la position GPS doit être ainsi
-	 * 
-	 */
+	* Tarik 24/04/2013: Allant du principe que les arbres seront espacés au minimum de 1 mètre,
+	* Alors la distance minimale pour la MAJ de la position GPS doit être ainsi
+	* 
+	*/
 	private static final long DISTANCE_MINIMALE_PrMAJ_LaPOSITION = 1; // en mètres
 	private static final long TEMPS_MINIMAL_PrMAJ_LaPOSITION = 1000; // en Millisecondes
 	
-	/* Tarik: Il y aura une incertitude au niveau de la géolocalisation,
-	 * Car même étant sur le même point géographique, la nexus ne rendra 
-	 * pas les mêmes cordonnées, donc, il faut prendre cet aspect en 
-	 * compte.
-	 */
+	
+	
+	/* Tarik 26/04/2013: Il y aura une incertitude au niveau de la géolocalisation,
+	* Car même étant sur le même point géographique, la nexus ne rendra 
+	* pas les mêmes cordonnées, donc, il faut prendre cet aspect en 
+	* compte.
+	*/
 	private static final double BORNE_INCERTITUDE_MIN_POSITION = 0.0000800;
 	private static final double BORNE_INCERTITUDE_MAX_POSITION = 0.0000800;
 	
 	
+	
+	/* Tarik 26/04/2013: Réglages des paramètres de la voix
+	*/
+	private static final float PUISSANCE_VOIX = (float) 0.7;
+	private static final float TEMPO_VOIX = (float) 0.8;
+	
+	
+	/* Tarik 26/04/2013: Texte Introductif qui sera lu à l'initialisation du TTS
+	*/
+	private String introText = "Le groupe un, celui de Tarik et de Mehdi vous souhaite la bienvenue à l'arboretum."
+	+ "Grâce à cette application, vous pourrez visiter chaque recoin de notre parc,"
+	+ "ce en ayant la certitude de ne rater aucune information, sur aucun arbre.";
+	
+	
+	
+	/* Tarik 22/04/2013: Reste des variables */
 	protected LocationManager locationManager;
 	protected Button afficherPositionGeo;
 
@@ -85,6 +107,8 @@ public class Navigation extends Activity implements SensorEventListener {
 	private float[] mGravity;
 	private float[] mMagnetic;
 	
+	private TextToSpeech tts;
+	
 	/* XML Parsing (Information Display) */
 	ImageView image;
 	
@@ -96,27 +120,48 @@ public class Navigation extends Activity implements SensorEventListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_navigation);
 		
-		
 		//---------------------------------
-		/*Tarik: Musique */
+		/*Tarik 26/04/2013: Musique */
 		//---------------------------------
-		
-		//MediaPlayer mp = MediaPlayer.create(getBaseContext(), R.raw.gp1ar_maintracksfx);
-		//mp.start();
-		
+		//musicInit();
 		//---------------------------------
-		/*Tarik: Boussole */
+		/*Tarik 26/04/2013:: Voix */
+		//--------------------------------
+		voiceInit();
 		//---------------------------------
-		
-		mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-		mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		mField = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-		text = (TextView) findViewById(R.id.textView3);
-		
+		/*Tarik 26/04/2013:: Boussole */
 		//---------------------------------
-		/*Tarik: Géolocalisation */
+		compassInit();
 		//---------------------------------
+		/*Tarik 26/04/2013:: Géolocalisation */
+		//---------------------------------
+		geoInit();
+		//----------------------------------
 		
+	}  
+
+	/*--------------------------------------------------------
+	----------------------------------------------------------
+	//TARIK 26/04/2013: Initialisateurs de notre Appli
+	----------------------------------------------------------
+	---------------------------------------------------------*/	
+	
+	//Initialisation de la musique d'intro
+	private void musicInit()
+	{
+		MediaPlayer mp = MediaPlayer.create(getBaseContext(), R.raw.gp1ar_maintracksfx);
+		mp.start();
+	}
+	//---------------------------
+	//Instanciation de notre tts 
+	private void voiceInit()
+	{
+		tts = new TextToSpeech(this,this );
+	}
+	//---------------------------
+	//Initialisation de notre géolocalisation
+	private void geoInit()
+	{
 		afficherPositionGeo = (Button) findViewById(R.id.bouton_recup_coordGeo);
 		geoPosition = (TextView) findViewById(R.id.textView5);
 		
@@ -137,7 +182,6 @@ public class Navigation extends Activity implements SensorEventListener {
 			e.printStackTrace();
 		}
 
-		
 		//Tarik: Affichage statique (dans le cas où le dynamique soit quelque peut dysfonctionnel)/Tout Prévoir.com, lol
 		afficherPositionGeo.setOnClickListener(new OnClickListener() {
 			@Override
@@ -157,9 +201,60 @@ public class Navigation extends Activity implements SensorEventListener {
 				}
 			}
 		}); 
-		//----------------------------------
-		
-	}   
+	}
+	//---------------------------
+	//Initialisation de notre boussole
+	private void compassInit()
+	{
+		mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+		mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+		mField = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+		text = (TextView) findViewById(R.id.textView3);
+	}	
+	
+	
+	
+	/*--------------------------------------------------------
+	----------------------------------------------------------
+	//TARIK: Listeners Text To Speech
+	----------------------------------------------------------
+	---------------------------------------------------------*/
+	
+	@Override
+	public void onInit(int status) 
+	{
+		// vérification de la disponibilité  de la synthèse vocale.
+		if (status == TextToSpeech.SUCCESS) 
+		{
+			int result = tts.setLanguage(Locale.FRANCE);
+			
+			// vérification ici si cette langue est supporté par le terminal et si elle existe
+			if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) 
+			Toast.makeText(getBaseContext(), "ERREUR: Le Terminal a un soucis avec la gestion des langues", Toast.LENGTH_SHORT);
+			else {
+				tts.setSpeechRate((float) TEMPO_VOIX);
+				tts.setPitch((float) PUISSANCE_VOIX);
+				tts.speak(introText, TextToSpeech.QUEUE_FLUSH,  null);
+			}
+		} 
+		else
+		// si la synthèse vocal n'est pas disponible
+		Toast.makeText(getBaseContext(), "ERREUR: La synthèse vocale n'est pas dispo'", Toast.LENGTH_SHORT);
+	}
+	
+	@Override
+	public void onDestroy() {
+		// Don't forget to shutdown tts!
+		if (tts != null) {
+			tts.stop();
+			tts.shutdown();
+		}
+		super.onDestroy();
+	}
+	
+	
+	
+	
 	
 	/*----------------------------------
 	------------------------------------
@@ -195,7 +290,7 @@ public class Navigation extends Activity implements SensorEventListener {
 			String castedLat=String.valueOf(locationNetwork.getLatitude());
 
 			//Tarik 25/04/2013: XML Hurray !
-			findElement(castedLong,castedLat);
+			trouverNotreArbre(castedLong,castedLat);
 			
 			
 		}
@@ -217,7 +312,7 @@ public class Navigation extends Activity implements SensorEventListener {
 			String castedLat=String.valueOf(locationGPS.getLatitude());
 
 			//Tarik 25/04/2013: XML Hurray !
-			findElement(castedLong,castedLat);
+			trouverNotreArbre(castedLong,castedLat);
 		}
 		else
 		{
@@ -226,7 +321,8 @@ public class Navigation extends Activity implements SensorEventListener {
 		}
 	} 
 	//----------------------------------------------------------------
-	//Turn GPS ON [By Tarik]
+	//Tarik 23/04/2013 :Allumer le GPS
+	//----------------------------------------------------------------
 	private void turnGPSOn()
 	{
 		String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
@@ -241,7 +337,7 @@ public class Navigation extends Activity implements SensorEventListener {
 		}
 	}
 	//----------------------------------------------------------------
-	////Tarik 23/04/2013 : Location (GEO) Listeners
+	//Tarik 23/04/2013 : Location (GEO) Listeners
 	//----------------------------------------------------------------
 	private class MyLocationListener implements LocationListener {
 		
@@ -255,7 +351,7 @@ public class Navigation extends Activity implements SensorEventListener {
 
 			//Tarik 25/04/2013: XML Hurray !
 			try {
-				findElement(castedLong,castedLat);
+				trouverNotreArbre(castedLong,castedLat);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -285,6 +381,9 @@ public class Navigation extends Activity implements SensorEventListener {
 		}
 		
 	}
+	
+	
+	
 	
 	/*----------------------------------
 	------------------------------------
@@ -376,23 +475,23 @@ public class Navigation extends Activity implements SensorEventListener {
 		int temps = 0;
 		
 		if (text.length() <= 100)
-			temps = 5000;
+		temps = 5000;
 		else if (text.length() > 100 && text.length() <= 200)
-			temps = 12000;
+		temps = 12000;
 		else if (text.length() > 200 && text.length() <= 300)
-			temps = 17000;
+		temps = 17000;
 		else if (text.length() > 300 && text.length() <= 400)
-			temps = 22000;
+		temps = 22000;
 		else if (text.length() > 400 && text.length() <= 500)
-			temps = 27000;
+		temps = 27000;
 		else if (text.length() > 500 && text.length() <= 600)
-			temps = 35000;
+		temps = 35000;
 		else if (text.length() > 600 && text.length() <= 700)
-			temps = 40000;
+		temps = 40000;
 		else if (text.length() > 700 && text.length() <= 800)
-			temps = 50000;
+		temps = 50000;
 		else
-			temps = 100000;
+		temps = 100000;
 		
 		
 		return temps;
@@ -406,116 +505,127 @@ public class Navigation extends Activity implements SensorEventListener {
 	-----------------------------------*/
 
 	//Tarik (26/04/2013): On souhaite chopper l'arbre qui nous interesse en dépend de sa lat & long
-	public void findElement(String maLongitudeActuelle, String maLatitudeActuelle) throws IOException, ParserConfigurationException, SAXException
+	public void trouverNotreArbre(String maLongitudeActuelle, String maLatitudeActuelle) throws IOException, ParserConfigurationException, SAXException
 	{
 		//Tarik 24/04/2013: On Charge notre petit XML pour le parser ensuite
 		InputStream raw = this.getApplicationContext().getAssets().open("XMLLocationData.xml");
 
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db = dbf.newDocumentBuilder();
 
-        Document doc = db.parse(raw);
-        doc.getDocumentElement().normalize();
-        NodeList nodeList = doc.getElementsByTagName("hotspot");
+		Document doc = db.parse(raw);
+		doc.getDocumentElement().normalize();
+		NodeList nodeList = doc.getElementsByTagName("hotspot");
 
-        //Tarik 24/04/2013: On parcourt notre 'tit XML bien sympathique
-        for (int i = 0; i < nodeList.getLength(); i++) {
+		//Tarik 24/04/2013: On parcourt notre 'tit XML bien sympathique
+		for (int i = 0; i < nodeList.getLength(); i++) {
 
-            Node node = nodeList.item(i);
-            
-            Element premierElement = (Element) node;
+			Node node = nodeList.item(i);
+			
+			Element premierElement = (Element) node;
 
-            NodeList titreListe = premierElement.getElementsByTagName("title");
-            NodeList infoListe = premierElement.getElementsByTagName("information");
-            NodeList latitudeListe = premierElement.getElementsByTagName("latitude");
-            NodeList longitudeListe = premierElement.getElementsByTagName("longitude");
-            NodeList imgListe = premierElement.getElementsByTagName("img");
-            
-            Element titreElement = (Element) titreListe.item(0);
-            Element latitudeElement = (Element) latitudeListe.item(0);
-            Element longitudeElement = (Element) longitudeListe.item(0);
-            Element imgElement = (Element) imgListe.item(0);
-            Element infoElement = (Element) infoListe.item(0);
-            
-            longitudeListe = longitudeElement.getChildNodes();
-            latitudeListe = latitudeElement.getChildNodes();
-            imgListe = imgElement.getChildNodes();
-            infoListe = infoElement.getChildNodes();
-            titreListe = titreElement.getChildNodes();
-            
-            /* Tarik: On teste si mes coords géo correspondent à une enregistrée dans le XML 
-             * Mais on convertit d'abord
-             * 
-             */
-            
-            //Pr Tester la différence (Incertitude géographique), on convertit nos strings en double
-            
-            xmlLatitude = latitudeListe.item(0).getNodeValue();
-            xmlLongitude = longitudeListe.item(0).getNodeValue();
-            
-            //Cordonnées de notre Arbre d'abord
-            double xmlTempDoubleLatitude = Double.parseDouble(xmlLatitude);
-            double xmlTempDoubleLongitude = Double.parseDouble(xmlLongitude);
-            
-            //Ensuite les miennes
-            double myTempDoubleLatitude = Double.parseDouble(maLatitudeActuelle);
-            double myTempDoubleLongitude = Double.parseDouble(maLongitudeActuelle);
-            
-            
-            if ((xmlLatitude.equals(maLatitudeActuelle) && xmlLongitude.equals(maLongitudeActuelle)) 
-            || 
-            ((myTempDoubleLatitude - BORNE_INCERTITUDE_MIN_POSITION <= xmlTempDoubleLatitude && xmlTempDoubleLatitude <= myTempDoubleLatitude + BORNE_INCERTITUDE_MAX_POSITION) 
-            && 
-            (myTempDoubleLongitude - BORNE_INCERTITUDE_MIN_POSITION <= xmlTempDoubleLongitude && xmlTempDoubleLongitude <= myTempDoubleLongitude + BORNE_INCERTITUDE_MAX_POSITION)) )
-            {		
-                //ImageView imageView = (ImageView) findViewById(R.id.imageView1);
-                int treeResID = getResources().getIdentifier(imgListe.item(0).getNodeValue(), "drawable", getPackageName());
-                //imageView.setImageResource(treeResID);
-                
-                
-                LayoutInflater inflater = getLayoutInflater();
-                View layout = inflater.inflate(R.layout.activity_navigation_treetoast,
-                                               (ViewGroup) findViewById(R.id.toast_layout_root));
+			NodeList titreListe = premierElement.getElementsByTagName("title");
+			NodeList infoListe = premierElement.getElementsByTagName("information");
+			NodeList latitudeListe = premierElement.getElementsByTagName("latitude");
+			NodeList longitudeListe = premierElement.getElementsByTagName("longitude");
+			NodeList imgListe = premierElement.getElementsByTagName("img");
+			
+			Element titreElement = (Element) titreListe.item(0);
+			Element latitudeElement = (Element) latitudeListe.item(0);
+			Element longitudeElement = (Element) longitudeListe.item(0);
+			Element imgElement = (Element) imgListe.item(0);
+			Element infoElement = (Element) infoListe.item(0);
+			
+			longitudeListe = longitudeElement.getChildNodes();
+			latitudeListe = latitudeElement.getChildNodes();
+			imgListe = imgElement.getChildNodes();
+			infoListe = infoElement.getChildNodes();
+			titreListe = titreElement.getChildNodes();
+			
+			/* Tarik: On teste si mes coords géo correspondent à une enregistrée dans le XML 
+			* Mais on convertit d'abord
+			* 
+			*/
+			
+			//Pr Tester la différence (Incertitude géographique), on convertit nos strings en double
+			
+			xmlLatitude = latitudeListe.item(0).getNodeValue();
+			xmlLongitude = longitudeListe.item(0).getNodeValue();
+			
+			//Cordonnées de notre Arbre d'abord
+			double xmlTempDoubleLatitude = Double.parseDouble(xmlLatitude);
+			double xmlTempDoubleLongitude = Double.parseDouble(xmlLongitude);
+			
+			//Ensuite les miennes
+			double myTempDoubleLatitude = Double.parseDouble(maLatitudeActuelle);
+			double myTempDoubleLongitude = Double.parseDouble(maLongitudeActuelle);
+			
+			
+			if ((xmlLatitude.equals(maLatitudeActuelle) && xmlLongitude.equals(maLongitudeActuelle)) 
+					|| 
+					((myTempDoubleLatitude - BORNE_INCERTITUDE_MIN_POSITION <= xmlTempDoubleLatitude && xmlTempDoubleLatitude <= myTempDoubleLatitude + BORNE_INCERTITUDE_MAX_POSITION) 
+						&& 
+						(myTempDoubleLongitude - BORNE_INCERTITUDE_MIN_POSITION <= xmlTempDoubleLongitude && xmlTempDoubleLongitude <= myTempDoubleLongitude + BORNE_INCERTITUDE_MAX_POSITION)) )
+			{		
+				int treeResID = getResources().getIdentifier(imgListe.item(0).getNodeValue(), "drawable", getPackageName());
+				LayoutInflater inflater = getLayoutInflater();
+				View layout = inflater.inflate(R.layout.activity_navigation_treetoast,
+				(ViewGroup) findViewById(R.id.toast_layout_root));
+				ImageView image = (ImageView) layout.findViewById(R.id.image);
+				image.setImageResource(treeResID);
+				
+				
+				/* AUDIO ICON */
+				/*
+				ImageView audioIcon = (ImageView) layout.findViewById(R.id.audioIcon);
+				int audioResID = getResources().getIdentifier("audio", "drawable", getPackageName());
+				audioIcon.setImageResource(audioResID);
+				audioIcon.setVisibility(View.VISIBLE);
+				*/
+				
+				
+				//Tarik: 26/04/2013: On affiche notre beau texte, avec le nom de l'arbre d'abord, suivi de sa description ensuite
+				TextView text = (TextView) layout.findViewById(R.id.text);
+				text.setText(titreListe.item(0).getNodeValue()+"\n\n"+ "\n" + infoListe.item(0).getNodeValue());
 
-                ImageView image = (ImageView) layout.findViewById(R.id.image);
-                image.setImageResource(treeResID);
-                
-                TextView text = (TextView) layout.findViewById(R.id.text);
-                text.setText(titreListe.item(0).getNodeValue()+"\n\n"+ "\n" + infoListe.item(0).getNodeValue());
-
-                final Toast toast = new Toast(getApplicationContext());
-                toast.setView(layout);
-                
-                
-            	
-            	/* Tarik 26/04/2013: Bah là on définit le temps de l'affichage de l'info de l'arbre
-                 * Sur une base expérimentale faite avec mes soins qui affiche le texte avec le temps
-                 * nécessaire pour le lire en dépend de sa longueur, en partant sur une base de 1sec=1000 milsec
-                 * 
-                 */
-                
-                new CountDownTimer(tempsNecessaireALaLecture(infoListe.item(0).getNodeValue()), 1000)
-                {
-                    public void onTick(long millisUntilFinished) 
-                    {
-                    	toast.show();
-                    	
-                    	//On cache le spinner quand on trouve notre arbre
-                    	ProgressBar pg = (ProgressBar) findViewById(R.id.progressBar1);
-                        pg.setVisibility(View.INVISIBLE);
-                    	
-                    }
-                    public void onFinish() 
-                    {
-                    	toast.show();
-                    	
-                    	//On cache le spinner quand on trouve notre arbre
-                    	ProgressBar pg = (ProgressBar) findViewById(R.id.progressBar1);
-                        pg.setVisibility(View.INVISIBLE);
-                    }
-                }.start();
-            	
-            }
-        }
+				//Tarik: 26/04/2013: On lit notre texte retrived du xml
+				tts.speak(infoListe.item(0).getNodeValue(), TextToSpeech.QUEUE_ADD,  null);
+				
+				
+				final Toast toast = new Toast(getApplicationContext());
+				toast.setView(layout);
+				
+				
+				
+				/* Tarik 26/04/2013: Bah là on définit le temps de l'affichage de l'info de l'arbre
+				* Sur une base expérimentale faite avec mes soins qui affiche le texte avec le temps
+				* nécessaire pour le lire en dépend de sa longueur, en partant sur une base de 1sec=1000 milsec
+				* 
+				*/
+				
+				new CountDownTimer(tempsNecessaireALaLecture(infoListe.item(0).getNodeValue()), 1000)
+				{
+					public void onTick(long millisUntilFinished) 
+					{
+						toast.show();
+						
+						//On cache le spinner quand on trouve notre arbre
+						ProgressBar pg = (ProgressBar) findViewById(R.id.progressBar1);
+						pg.setVisibility(View.INVISIBLE);
+						
+					}
+					public void onFinish() 
+					{
+						toast.show();
+						
+						//On cache le spinner quand on trouve notre arbre
+						ProgressBar pg = (ProgressBar) findViewById(R.id.progressBar1);
+						pg.setVisibility(View.INVISIBLE);
+					}
+				}.start();
+				ProgressBar pg = (ProgressBar) findViewById(R.id.progressBar1);
+				pg.setVisibility(View.VISIBLE);
+			}
+		}
 	}
 }

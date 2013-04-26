@@ -33,5 +33,6 @@
         <string name="tree_img"></string>
         <string name="arbre_img"></string>
         <string name="geoPosition_fr"></string>
+        <string name="audio_icon"></string>
 
 </resources>
