@@ -5,6 +5,7 @@
 
 package botanical.main.activity;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -20,6 +21,10 @@ import org.xml.sax.SAXException;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -30,11 +35,14 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Environment;
 import android.provider.Settings;
 import org.w3c.dom.Element;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,6 +69,9 @@ public class Navigation extends Activity implements SensorEventListener {
 	private TextView text;
 	private float[] mGravity;
 	private float[] mMagnetic;
+	
+	/* XML Parsing (Information Display) */
+	ImageView image;
 	
 	//----------------------------------------------------------------------
 	//onCreate [Lancement]
@@ -374,28 +385,22 @@ public class Navigation extends Activity implements SensorEventListener {
             {
             	//Intent intent = new Intent(this, TreeInformation.class);
     			//startActivity(intent);
-    			
-    			
-            	final Toast tag = Toast.makeText(getApplicationContext(), 
-            			"Bingo, dans le XML c'est cette lat/long \n"
-            					+"Infos: "+informationListe.item(0).getNodeValue()+ "\n"
-            					+"Lat: "+latitudeListe.item(0).getNodeValue()+ "\n"
-            					+"Long: " +latitudeListe.item(0).getNodeValue()+ "\n\n"
-            					
-            					+"\n Mes cordonnées sont: "
-            					+"Lat: "+latitude+"\n"
-            					+"Long: " + longitude+"\n",
-            					Toast.LENGTH_LONG);
-
-            	tag.show();
-            	//On l'affiche pdt 20 sec
-            	new CountDownTimer(20000, 1000)
-            	{
-
-            	    public void onTick(long millisUntilFinished) {tag.show();}
-            	    public void onFinish() {tag.show();}
-
-            	}.start();
+            	
+            	
+                ImageView imageView = (ImageView) findViewById(R.id.imageView1);
+                int resId = getResources().getIdentifier(informationListe.item(0).getNodeValue(), "drawable", getPackageName());
+                imageView.setImageResource(resId);
+                
+                /*
+                text.setText("Bingo, dans le XML c'est cette lat/long \n"
+    					+"img: "+ informationListe.item(0).getNodeValue()+"\n"
+    					+"Lat: "+latitudeListe.item(0).getNodeValue()+ "\n"
+    					+"Long: " +latitudeListe.item(0).getNodeValue()+ "\n\n"
+    					
+    					+"\n Mes cordonnées sont: "
+    					+"Lat: "+latitude+"\n"
+    					+"Long: " + longitude+"\n");
+                */
             	
             }
         }

@@ -26,12 +26,14 @@ public final class R {
     public static final class drawable {
         public static final int background_4=0x7f020000;
         public static final int ic_launcher=0x7f020001;
+        public static final int sapin=0x7f020002;
     }
     public static final class id {
         public static final int RelativeLayout1=0x7f090000;
-        public static final int action_settings=0x7f090008;
+        public static final int action_settings=0x7f090009;
         public static final int bouton_recup_coordGeo=0x7f090001;
-        public static final int mediaController1=0x7f090007;
+        public static final int imageView1=0x7f090007;
+        public static final int mediaController1=0x7f090008;
         public static final int progressBar1=0x7f090005;
         public static final int textView1=0x7f090002;
         public static final int textView2=0x7f090003;
@@ -70,6 +72,7 @@ public final class R {
         public static final int title_activity_navigation=0x7f050004;
         public static final int treeDescription_fr=0x7f050014;
         public static final int treeInformationTitle_fr=0x7f050015;
+        public static final int tree_img=0x7f050016;
     }
     public static final class style {
         /** 

@@ -30,5 +30,6 @@
         <string name="bingoText"></string>
         <string name="treeDescription_fr"></string>
         <string name="treeInformationTitle_fr">Informations Arbre</string>
+        <string name="tree_img"></string>
 
 </resources>

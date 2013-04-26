@@ -1,6 +1,6 @@
 package botanical.main.activity;
 
-import java.util.ArrayList;
+
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import botanical.main.activity.hotSpot.BoundingBox;
 import botanical.main.broadcastReceiver.NavigationBR;
 
 import com.example.gp1androidproject.R;
@@ -28,7 +27,6 @@ public class SplashScreen extends Activity {
 	private Handler mHandler = new Handler();
 	public static final String BROADCAST = "android.location.PROVIDERS_CHANGED";
 	private NavigationBR broadcatReceiver = new NavigationBR(); 
-	private ArrayList<BoundingBox> boundingBoxs;
 	protected ProgressDialog mProgressDialog;
 
 
@@ -52,7 +50,12 @@ public class SplashScreen extends Activity {
 			@Override
 			public void run() {
 				while (mProgressStatus < 100) {
-					mProgressStatus = doWork();
+					try {
+						mProgressStatus = doWork();
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					
 					try {
 						Thread.sleep(2000);
@@ -122,8 +125,9 @@ public class SplashScreen extends Activity {
 	* this method used in the loop iterate the tasks that should be done 
 	* to start the next activity
 	* @return
+	 * @throws InterruptedException 
 	*/
-	protected int doWork() {
+	protected int doWork() throws InterruptedException {
 		
 		
 		if(mProgressStatus == 0){
@@ -163,6 +167,7 @@ public class SplashScreen extends Activity {
 			
 		}
 		else{
+			Thread.sleep(1000);
 			// starting Navigation activity		
 			this.runOnUiThread(
 			new Runnable(){
