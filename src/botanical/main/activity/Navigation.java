@@ -40,10 +40,11 @@ import org.w3c.dom.Element;
 
 
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -90,7 +91,7 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 	
 	/* Tarik 26/04/2013: Texte Introductif qui sera lu à l'initialisation du TTS
 	*/
-	private String introText = "Tarik vous souhaite la bienvenue à l'Arboretum !";
+	//private String introText = "Tarik vous souhaite la bienvenue à l'Arboretum !";
 	
 	
 	
@@ -128,7 +129,7 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 		//---------------------------------
 		/*Tarik 26/04/2013: Musique */
 		//---------------------------------
-		//musicInit();
+		musicInit();
 		//---------------------------------
 		/*Tarik 26/04/2013: Voix */
 		//--------------------------------
@@ -141,7 +142,10 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 		/*Tarik 26/04/2013: Géolocalisation */
 		//---------------------------------
 		geoInit();
-		//----------------------------------
+		//---------------------------------
+		/*Tarik 27/04/2013: Options */
+		//---------------------------------
+		
 	}  
 	
 	//----------------------------------------------------------------------
@@ -154,39 +158,63 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 			tts.stop();
 			tts.shutdown();
 		}
-	
-	  //On ferme notre toast lorsqu'on ferme l'appli
-	  Thread thread = new Thread(){
-             @Override
-            public void run() {
-                 try {
-                    Thread.sleep(3500);
-                    Navigation.this.finish();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-             }  
-           };
            
 		super.onDestroy();
 	}
 
+	//----------------------------------------------------------------------
+	//Tarik 27/04/2013: Notre petit menu d'options
+	//----------------------------------------------------------------------		
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	  super.onCreateOptionsMenu(menu);
+	  MenuInflater inflater = getMenuInflater();
+	  inflater.inflate(R.menu.navigation_menu, menu);
+	  return true;
+	}
+	//----------------------------------------------------------------------
+	//Tarik 27/04/2013: on active ou on désactive la musique
+	//----------------------------------------------------------------------
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+	    switch(item.getItemId()) {
+	        case(R.id.item1):
+	            if(item.isChecked()) {
+	                item.setChecked(false);
+	                musicStop();
+	            } else {
+	                item.setChecked(true);
+	                musicInit();
+	            }
+	            break;
+	        default:
+	            return super.onContextItemSelected(item);
+	    }
+	    return true;
+	}
 	/*--------------------------------------------------------
 	----------------------------------------------------------
 	//TARIK 26/04/2013: Initialisateurs de notre Appli
 	----------------------------------------------------------
 	---------------------------------------------------------*/	
 	
-	//------------------------------------------------
+	//---------------------------------------------------------
 	//Tarik 27/04/2013: Initialisation de la musique d'intro
-	//------------------------------------------------
-	/*
+	//---------------------------------------------------------
 	private void musicInit()
 	{
-		MediaPlayer mp = MediaPlayer.create(getBaseContext(), R.raw.gp1ar_maintracksfx);
+		MediaPlayer mp = MediaPlayer.create(getBaseContext(), R.raw.main_track);
 		mp.start();
 	}
-	*/
+	//---------------------------------------------------------
+	//Tarik 27/04/2013: Arrêt de la musique d'intro
+	//---------------------------------------------------------
+	private void musicStop()
+	{
+		MediaPlayer mp = MediaPlayer.create(getBaseContext(), R.raw.main_track);
+		mp.stop();
+	}
+
 	//------------------------------------------------
 	//Tarik 27/04/2013: Instanciation de notre tts 
 	//------------------------------------------------
