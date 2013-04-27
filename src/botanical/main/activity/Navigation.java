@@ -40,8 +40,10 @@ import org.w3c.dom.Element;
 
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -51,7 +53,7 @@ import android.widget.Toast;
 
 import com.example.gp1androidproject.R;
 
-@SuppressLint("ShowToast")
+
 public class Navigation extends Activity implements SensorEventListener,TextToSpeech.OnInitListener {
 	
 	/*-----------------------------------------------------
@@ -87,7 +89,8 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 	
 	/* Tarik 26/04/2013: Texte Introductif qui sera lu à l'initialisation du TTS
 	*/
-	private String introText = "Le groupe un, celui de Tarik et de Mehdi vous souhaite la bienvenue à l'arboretum."
+	private String introText = "Le groupe un, celui de Meryième, Camille, Augusta, Georges, Karim, Yann, Amine, et " 
+	+ "finallement les 2 beaux gosses du projet, Mehdi et Tarik, vous souhaitent la bienvenue à l'arboretum."
 	+ "Grâce à cette application, vous pourrez visiter chaque recoin de notre parc,"
 	+ "ce en ayant la certitude de ne rater aucune information, sur aucun arbre.";
 	
@@ -147,11 +150,13 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 	---------------------------------------------------------*/	
 	
 	//Initialisation de la musique d'intro
+	/*
 	private void musicInit()
 	{
 		MediaPlayer mp = MediaPlayer.create(getBaseContext(), R.raw.gp1ar_maintracksfx);
 		mp.start();
 	}
+	*/
 	//---------------------------
 	//Instanciation de notre tts 
 	private void voiceInit()
@@ -244,7 +249,7 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 	
 	@Override
 	public void onDestroy() {
-		// Don't forget to shutdown tts!
+		// On coupe le son
 		if (tts != null) {
 			tts.stop();
 			tts.shutdown();
@@ -560,7 +565,7 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 			double myTempDoubleLatitude = Double.parseDouble(maLatitudeActuelle);
 			double myTempDoubleLongitude = Double.parseDouble(maLongitudeActuelle);
 			
-			
+			//Meryeme & Tarik: Merci à ma chérie pour ce petit if sympathique, et du travail de réflexion (algo) mené derrière.
 			if ((xmlLatitude.equals(maLatitudeActuelle) && xmlLongitude.equals(maLongitudeActuelle)) 
 					|| 
 					((myTempDoubleLatitude - BORNE_INCERTITUDE_MIN_POSITION <= xmlTempDoubleLatitude && xmlTempDoubleLatitude <= myTempDoubleLatitude + BORNE_INCERTITUDE_MAX_POSITION) 
@@ -576,12 +581,13 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 				
 				
 				/* AUDIO ICON */
-				/*
-				ImageView audioIcon = (ImageView) layout.findViewById(R.id.audioIcon);
-				int audioResID = getResources().getIdentifier("audio", "drawable", getPackageName());
-				audioIcon.setImageResource(audioResID);
-				audioIcon.setVisibility(View.VISIBLE);
-				*/
+				
+				//ImageView audioIcon = (ImageView) layout.findViewById(R.id.audioIcon);
+				//int audioResID = getResources().getIdentifier("audio", "drawable", getPackageName());
+				//audioIcon.setImageResource(audioResID);
+				//audioIcon.setVisibility(View.VISIBLE);
+				
+			
 				
 				
 				//Tarik: 26/04/2013: On affiche notre beau texte, avec le nom de l'arbre d'abord, suivi de sa description ensuite
@@ -620,11 +626,10 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 						
 						//On cache le spinner quand on trouve notre arbre
 						ProgressBar pg = (ProgressBar) findViewById(R.id.progressBar1);
-						pg.setVisibility(View.INVISIBLE);
+						pg.setVisibility(View.VISIBLE);
 					}
 				}.start();
-				ProgressBar pg = (ProgressBar) findViewById(R.id.progressBar1);
-				pg.setVisibility(View.VISIBLE);
+				
 			}
 		}
 	}
