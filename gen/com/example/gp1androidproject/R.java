@@ -78,6 +78,7 @@ public final class R {
         public static final int navigation_header=0x7f050002;
         public static final int powered=0x7f050008;
         public static final int powered_fr=0x7f05000a;
+        public static final int recherche_manuelle_fr=0x7f05001a;
         public static final int textDetection_fr=0x7f05000b;
         public static final int titleSplash=0x7f050006;
         public static final int title_activity_navigation=0x7f050004;

@@ -115,8 +115,10 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 	/* XML Parsing (Information Display) */
 	ImageView image;
 	
+	
+	
 	//----------------------------------------------------------------------
-	//onCreate [Lancement]
+	//Tarik 22/04/2013:onCreate [Lancement]
 	//----------------------------------------------------------------------
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -140,8 +142,34 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 		//---------------------------------
 		geoInit();
 		//----------------------------------
-		
 	}  
+	
+	//----------------------------------------------------------------------
+	//Tarik 22/04/2013:onDestroy [Fermeture]
+	//----------------------------------------------------------------------	
+	@Override
+	public void onDestroy() {
+		// On coupe le son
+		if (tts != null) {
+			tts.stop();
+			tts.shutdown();
+		}
+	
+	  //On ferme notre toast lorsqu'on ferme l'appli
+	  Thread thread = new Thread(){
+             @Override
+            public void run() {
+                 try {
+                    Thread.sleep(3500);
+                    Navigation.this.finish();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+             }  
+           };
+           
+		super.onDestroy();
+	}
 
 	/*--------------------------------------------------------
 	----------------------------------------------------------
@@ -250,16 +278,6 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 		else
 		// si la synthèse vocal n'est pas disponible
 		Toast.makeText(getBaseContext(), "ERREUR: La synthèse vocale n'est pas dispo'", Toast.LENGTH_SHORT);
-	}
-	
-	@Override
-	public void onDestroy() {
-		// On coupe le son
-		if (tts != null) {
-			tts.stop();
-			tts.shutdown();
-		}
-		super.onDestroy();
 	}
 	
 	//----------------------------------------------------------------
@@ -653,18 +671,43 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 						ProgressBar pg = (ProgressBar) findViewById(R.id.progressBar1);
 						pg.setVisibility(View.INVISIBLE);
 						
+						//On cache le "En cours de recherche"
+						TextView txt = (TextView) findViewById(R.id.textView1);
+						txt.setVisibility(View.INVISIBLE);
+						
+						//On cache le "placez votre tablette..."
+						TextView txt2 = (TextView) findViewById(R.id.textView2);
+						txt2.setVisibility(View.INVISIBLE);
+						
+						//On cache le bouton "chercher"
+						afficherPositionGeo = (Button) findViewById(R.id.bouton_recup_coordGeo);
+						afficherPositionGeo.setVisibility(View.INVISIBLE);
+						
 					}
 					public void onFinish() 
 					{
 						toast.show();
 						
-						//On cache le spinner quand on trouve notre arbre
+						//On affiche le spinner quand on trouve notre arbre
 						ProgressBar pg = (ProgressBar) findViewById(R.id.progressBar1);
 						pg.setVisibility(View.VISIBLE);
+						
+						//On affiche le "En cours de recherche"
+						TextView txt = (TextView) findViewById(R.id.textView1);
+						txt.setVisibility(View.VISIBLE);
+						
+						//On affiche le "placez votre tablette..."
+						TextView txt2 = (TextView) findViewById(R.id.textView2);
+						txt2.setVisibility(View.VISIBLE);
+						
+						//On affiche le bouton "chercher"
+						afficherPositionGeo = (Button) findViewById(R.id.bouton_recup_coordGeo);
+						afficherPositionGeo.setVisibility(View.VISIBLE);						
+						
+						//S'il n y a plus de texte, notre icône n'a plus lieu d'être
 						audioIcon.setVisibility(View.INVISIBLE);
 					}
 				}.start();
-				
 			}
 		}
 	}
@@ -674,4 +717,5 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 		// TODO Auto-generated method stub
 		
 	}
+
 }
