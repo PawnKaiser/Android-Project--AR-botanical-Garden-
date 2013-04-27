@@ -10,16 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".Navigation" >
-
-    <ImageView
-        android:id="@+id/audioIcon"
-        android:layout_width="52dp"
-        android:layout_height="42dp"
-        android:src="@drawable/audio"
-        android:contentDescription="@string/audio_icon"
-        android:visibility="invisible"
-         />
-
+    
     <Button
         android:id="@+id/bouton_recup_coordGeo"
         android:layout_width="wrap_content"
@@ -88,5 +79,17 @@
         android:layout_alignLeft="@+id/textView3"
         android:layout_alignTop="@+id/textView2"
         android:text="@string/compass2" />
+
+    <ImageView
+        android:id="@+id/audioIcon"
+        android:layout_width="52dp"
+        android:layout_height="42dp"
+        android:layout_alignRight="@+id/TextView01"
+        android:layout_alignTop="@+id/TextView01"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:contentDescription="@string/audio_icon"
+        android:src="@drawable/audio"
+        android:visibility="invisible" />
     
 </RelativeLayout>

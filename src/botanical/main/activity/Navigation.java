@@ -54,7 +54,8 @@ import android.widget.Toast;
 import com.example.gp1androidproject.R;
 
 
-public class Navigation extends Activity implements SensorEventListener,TextToSpeech.OnInitListener {
+@SuppressLint("ShowToast")
+public class Navigation extends Activity implements SensorEventListener,TextToSpeech.OnInitListener, OnClickListener {
 	
 	/*-----------------------------------------------------
 	Par Tarik Gilani : Entre le 22/04/2013 et Début Mai 13
@@ -85,14 +86,11 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 	*/
 	private static final float PUISSANCE_VOIX = (float) 0.7;
 	private static final float TEMPO_VOIX = (float) 0.8;
-	
+	private boolean flag=false;
 	
 	/* Tarik 26/04/2013: Texte Introductif qui sera lu à l'initialisation du TTS
 	*/
-	private String introText = "Le groupe un, celui de Meryième, Camille, Augusta, Georges, Karim, Yann, Amine, et " 
-	+ "finallement les 2 beaux gosses du projet, Mehdi et Tarik, vous souhaitent la bienvenue à l'arboretum."
-	+ "Grâce à cette application, vous pourrez visiter chaque recoin de notre parc,"
-	+ "ce en ayant la certitude de ne rater aucune information, sur aucun arbre.";
+	private String introText = "Tarik vous souhaite la bienvenue à l'Arboretum !";
 	
 	
 	
@@ -112,6 +110,8 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 	
 	private TextToSpeech tts;
 	
+
+	
 	/* XML Parsing (Information Display) */
 	ImageView image;
 	
@@ -128,15 +128,15 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 		//---------------------------------
 		//musicInit();
 		//---------------------------------
-		/*Tarik 26/04/2013:: Voix */
+		/*Tarik 26/04/2013: Voix */
 		//--------------------------------
 		voiceInit();
 		//---------------------------------
-		/*Tarik 26/04/2013:: Boussole */
+		/*Tarik 26/04/2013: Boussole */
 		//---------------------------------
 		compassInit();
 		//---------------------------------
-		/*Tarik 26/04/2013:: Géolocalisation */
+		/*Tarik 26/04/2013: Géolocalisation */
 		//---------------------------------
 		geoInit();
 		//----------------------------------
@@ -149,7 +149,9 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 	----------------------------------------------------------
 	---------------------------------------------------------*/	
 	
-	//Initialisation de la musique d'intro
+	//------------------------------------------------
+	//Tarik 27/04/2013: Initialisation de la musique d'intro
+	//------------------------------------------------
 	/*
 	private void musicInit()
 	{
@@ -157,14 +159,16 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 		mp.start();
 	}
 	*/
-	//---------------------------
-	//Instanciation de notre tts 
+	//------------------------------------------------
+	//Tarik 27/04/2013: Instanciation de notre tts 
+	//------------------------------------------------
 	private void voiceInit()
 	{
 		tts = new TextToSpeech(this,this );
 	}
-	//---------------------------
-	//Initialisation de notre géolocalisation
+	//---------------------------------------------------------------
+	//Tarik 27/04/2013: Initialisation de notre géolocalisation
+	//---------------------------------------------------------------
 	private void geoInit()
 	{
 		afficherPositionGeo = (Button) findViewById(R.id.bouton_recup_coordGeo);
@@ -207,8 +211,9 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 			}
 		}); 
 	}
-	//---------------------------
-	//Initialisation de notre boussole
+	//------------------------------------------------
+	//Tarik 27/04/2013: Initialisation de notre boussole
+	//------------------------------------------------
 	private void compassInit()
 	{
 		mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
@@ -239,7 +244,7 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 			else {
 				tts.setSpeechRate((float) TEMPO_VOIX);
 				tts.setPitch((float) PUISSANCE_VOIX);
-				tts.speak(introText, TextToSpeech.QUEUE_FLUSH,  null);
+				//tts.speak(introText, TextToSpeech.QUEUE_FLUSH,  null);
 			}
 		} 
 		else
@@ -257,7 +262,13 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 		super.onDestroy();
 	}
 	
-	
+	//----------------------------------------------------------------
+	/* Tarik 23/04/2013 : Méthode pour lire à voix haute notre texte */
+	//----------------------------------------------------------------
+	public void lisTexteArbre(String info)
+	{
+		tts.speak(info, TextToSpeech.QUEUE_FLUSH,  null);
+	}
 	
 	
 	
@@ -505,7 +516,9 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 	
 	/*----------------------------------
 	------------------------------------
-	//TARIK: METHODES DE XML Reading
+	//TARIK: Recupérer Infos notre Arbre
+	 * + Gestion du son + autres bonnes
+	 * choses
 	------------------------------------
 	-----------------------------------*/
 
@@ -580,14 +593,35 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 				image.setImageResource(treeResID);
 				
 				
-				/* AUDIO ICON */
+				/* Tarik 27/04/2013: On affiche l'icône */
+				final ImageView audioIcon = (ImageView)findViewById(R.id.audioIcon);
+				audioIcon.setVisibility(View.VISIBLE);
+				audioIcon.setImageResource(R.drawable.audio);
 				
-				//ImageView audioIcon = (ImageView) layout.findViewById(R.id.audioIcon);
-				//int audioResID = getResources().getIdentifier("audio", "drawable", getPackageName());
-				//audioIcon.setImageResource(audioResID);
-				//audioIcon.setVisibility(View.VISIBLE);
+				final String texteArbre= infoListe.item(0).getNodeValue();
 				
-			
+				// On désactive la voix ou on la réactive
+				audioIcon.setOnClickListener(new OnClickListener()
+		        {
+		            public void onClick(View v)
+		            {
+		                if(!flag)
+		                {
+		                	audioIcon.setImageResource(R.drawable.audio);
+		                	flag=true;
+		                	//On coupe le son
+		                	tts.stop();
+		                }
+		                else
+		                {       
+		                    audioIcon.setImageResource(R.drawable.audio_stopped);
+		                    flag=false;
+		                    //On active le son
+		                    lisTexteArbre(texteArbre);
+		                    
+		                }
+		            }
+		        });
 				
 				
 				//Tarik: 26/04/2013: On affiche notre beau texte, avec le nom de l'arbre d'abord, suivi de sa description ensuite
@@ -627,10 +661,17 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 						//On cache le spinner quand on trouve notre arbre
 						ProgressBar pg = (ProgressBar) findViewById(R.id.progressBar1);
 						pg.setVisibility(View.VISIBLE);
+						audioIcon.setVisibility(View.INVISIBLE);
 					}
 				}.start();
 				
 			}
 		}
+	}
+
+	@Override
+	public void onClick(View arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }
