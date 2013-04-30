@@ -35,5 +35,6 @@
         <string name="geoPosition_fr"></string>
         <string name="audio_icon"></string>
         <string name="recherche_manuelle_fr">Rechercher manuellement</string>
+        <string name="music_icon"></string>
 
 </resources>

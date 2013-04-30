@@ -28,26 +28,29 @@ public final class R {
         public static final int audio_stopped=0x7f020001;
         public static final int ic_launcher=0x7f020002;
         public static final int main_background=0x7f020003;
-        public static final int sapin=0x7f020004;
-        public static final int sequoia=0x7f020005;
-        public static final int toast_border=0x7f020006;
+        public static final int music=0x7f020004;
+        public static final int music_stopped=0x7f020005;
+        public static final int sapin=0x7f020006;
+        public static final int sequoia=0x7f020007;
+        public static final int toast_border=0x7f020008;
     }
     public static final class id {
         public static final int RelativeLayout1=0x7f0a0000;
-        public static final int TextView01=0x7f0a0004;
-        public static final int action_settings=0x7f0a000e;
-        public static final int audioIcon=0x7f0a0009;
+        public static final int TextView01=0x7f0a0002;
+        public static final int action_settings=0x7f0a000f;
+        public static final int audioIcon=0x7f0a0005;
         public static final int bouton_recup_coordGeo=0x7f0a0001;
-        public static final int image=0x7f0a000b;
-        public static final int item1=0x7f0a000d;
-        public static final int progressBar1=0x7f0a0007;
-        public static final int text=0x7f0a000c;
-        public static final int textView1=0x7f0a0002;
-        public static final int textView2=0x7f0a0003;
-        public static final int textView3=0x7f0a0006;
-        public static final int textView4=0x7f0a0008;
-        public static final int textView5=0x7f0a0005;
-        public static final int toast_layout_root=0x7f0a000a;
+        public static final int image=0x7f0a000c;
+        public static final int item1=0x7f0a000e;
+        public static final int musicIcon=0x7f0a0006;
+        public static final int progressBar1=0x7f0a0003;
+        public static final int text=0x7f0a000d;
+        public static final int textView1=0x7f0a0004;
+        public static final int textView2=0x7f0a0007;
+        public static final int textView3=0x7f0a0008;
+        public static final int textView4=0x7f0a000a;
+        public static final int textView5=0x7f0a0009;
+        public static final int toast_layout_root=0x7f0a000b;
     }
     public static final class layout {
         public static final int activity_navigation=0x7f030000;
@@ -79,6 +82,7 @@ public final class R {
         public static final int hello_world=0x7f060005;
         public static final int latitude_fr=0x7f06000e;
         public static final int longitude_fr=0x7f06000f;
+        public static final int music_icon=0x7f06001b;
         public static final int navigation_header=0x7f060002;
         public static final int powered=0x7f060008;
         public static final int powered_fr=0x7f06000a;

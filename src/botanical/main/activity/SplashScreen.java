@@ -188,5 +188,13 @@ public class SplashScreen extends Activity {
 		getMenuInflater().inflate(R.menu.splash_screen, menu);
 		return true;
 	}
-
+	
+	
+	@Override
+	public void onDestroy() {
+        finish();   
+		super.onDestroy();
+	}
 }
+
+

@@ -29,6 +29,7 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -78,8 +79,8 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 	* pas les mêmes cordonnées, donc, il faut prendre cet aspect en 
 	* compte.
 	*/
-	private static final double BORNE_INCERTITUDE_MIN_POSITION = 0.0000800;
-	private static final double BORNE_INCERTITUDE_MAX_POSITION = 0.0000800;
+	private static final double BORNE_INCERTITUDE_MIN_POSITION = 0.0001000;
+	private static final double BORNE_INCERTITUDE_MAX_POSITION = 0.0001000;
 	
 	
 	
@@ -88,10 +89,11 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 	private static final float PUISSANCE_VOIX = (float) 0.7;
 	private static final float TEMPO_VOIX = (float) 0.8;
 	private boolean flag=false;
+	private boolean flagMusique=false;
 	
 	/* Tarik 26/04/2013: Texte Introductif qui sera lu à l'initialisation du TTS
 	*/
-	//private String introText = "Tarik vous souhaite la bienvenue à l'Arboretum !";
+	private String introText = "Tarik vous souhaite la bienvenue à l'Arboretum !, Monsieur Mehdi, comme vous pouvez le voir, la voix (ou le TTS), fonctionne parfaitement !";
 	
 	
 	
@@ -112,7 +114,7 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 	private TextToSpeech tts;
 	
 
-	
+	MediaPlayer mp;
 	/* XML Parsing (Information Display) */
 	ImageView image;
 	
@@ -125,6 +127,8 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_navigation);
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+		mp = MediaPlayer.create(getBaseContext(), R.raw.main_track);
 		
 		//---------------------------------
 		/*Tarik 26/04/2013: Musique */
@@ -158,7 +162,8 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 			tts.stop();
 			tts.shutdown();
 		}
-           
+		
+        finish();   
 		super.onDestroy();
 	}
 
@@ -183,8 +188,7 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 	                item.setChecked(false);
 	                musicStop();
 	            } else {
-	                item.setChecked(true);
-	                musicInit();
+						musicInit();
 	            }
 	            break;
 	        default:
@@ -202,17 +206,46 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 	//Tarik 27/04/2013: Initialisation de la musique d'intro
 	//---------------------------------------------------------
 	private void musicInit()
-	{
-		MediaPlayer mp = MediaPlayer.create(getBaseContext(), R.raw.main_track);
+	{	
+		
 		mp.start();
+		
+		/* Tarik 30/04/2013: On affiche l'icône */
+		final ImageView musicIcon = (ImageView)findViewById(R.id.musicIcon);
+		musicIcon.setVisibility(View.VISIBLE);
+		musicIcon.setImageResource(R.drawable.music);
+		
+		// On désactive la musique ou on la réactive
+		musicIcon.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                if(!flagMusique)
+                {
+                	musicIcon.setImageResource(R.drawable.music);
+                	flagMusique=true;
+                	
+                	//On coupe la musique
+                	musicStop();
+            		
+                }
+                else
+                {       
+                	musicIcon.setImageResource(R.drawable.music_stopped);
+                	flagMusique=false;
+                	
+                	//On rééclenche la musique
+                	mp.start();
+                }
+            }
+        });		
 	}
 	//---------------------------------------------------------
-	//Tarik 27/04/2013: Arrêt de la musique d'intro
+	//Tarik 30/04/2013: Arrêt de la musique d'intro
 	//---------------------------------------------------------
 	private void musicStop()
 	{
-		MediaPlayer mp = MediaPlayer.create(getBaseContext(), R.raw.main_track);
-		mp.stop();
+		mp.pause();
 	}
 
 	//------------------------------------------------
@@ -300,7 +333,7 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 			else {
 				tts.setSpeechRate((float) TEMPO_VOIX);
 				tts.setPitch((float) PUISSANCE_VOIX);
-				//tts.speak(introText, TextToSpeech.QUEUE_FLUSH,  null);
+				tts.speak(introText, TextToSpeech.QUEUE_FLUSH,  null);
 			}
 		} 
 		else
@@ -631,111 +664,9 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 						&& 
 						(myTempDoubleLongitude - BORNE_INCERTITUDE_MIN_POSITION <= xmlTempDoubleLongitude && xmlTempDoubleLongitude <= myTempDoubleLongitude + BORNE_INCERTITUDE_MAX_POSITION)) )
 			{		
-				int treeResID = getResources().getIdentifier(imgListe.item(0).getNodeValue(), "drawable", getPackageName());
-				LayoutInflater inflater = getLayoutInflater();
-				View layout = inflater.inflate(R.layout.activity_navigation_treetoast,
-				(ViewGroup) findViewById(R.id.toast_layout_root));
-				ImageView image = (ImageView) layout.findViewById(R.id.image);
-				image.setImageResource(treeResID);
 				
+				afficherInfosArbre(titreListe.item(0).getNodeValue(), infoListe.item(0).getNodeValue(), imgListe.item(0).getNodeValue());
 				
-				/* Tarik 27/04/2013: On affiche l'icône */
-				final ImageView audioIcon = (ImageView)findViewById(R.id.audioIcon);
-				audioIcon.setVisibility(View.VISIBLE);
-				audioIcon.setImageResource(R.drawable.audio);
-				
-				final String texteArbre= infoListe.item(0).getNodeValue();
-				
-				// On désactive la voix ou on la réactive
-				audioIcon.setOnClickListener(new OnClickListener()
-		        {
-		            public void onClick(View v)
-		            {
-		                if(!flag)
-		                {
-		                	audioIcon.setImageResource(R.drawable.audio);
-		                	flag=true;
-		                	//On coupe le son
-		                	tts.stop();
-		                }
-		                else
-		                {       
-		                    audioIcon.setImageResource(R.drawable.audio_stopped);
-		                    flag=false;
-		                    //On active le son
-		                    lisTexteArbre(texteArbre);
-		                    
-		                }
-		            }
-		        });
-				
-				
-				//Tarik: 26/04/2013: On affiche notre beau texte, avec le nom de l'arbre d'abord, suivi de sa description ensuite
-				TextView text = (TextView) layout.findViewById(R.id.text);
-				text.setText(titreListe.item(0).getNodeValue()+"\n\n"+ "\n" + infoListe.item(0).getNodeValue());
-
-				//Tarik: 26/04/2013: On lit notre texte retrived du xml
-				tts.speak(infoListe.item(0).getNodeValue(), TextToSpeech.QUEUE_ADD,  null);
-				
-				
-				final Toast toast = new Toast(getApplicationContext());
-				toast.setView(layout);
-				
-				
-				
-				/* Tarik 26/04/2013: Bah là on définit le temps de l'affichage de l'info de l'arbre
-				* Sur une base expérimentale faite avec mes soins qui affiche le texte avec le temps
-				* nécessaire pour le lire en dépend de sa longueur, en partant sur une base de 1sec=1000 milsec
-				* 
-				*/
-				
-				new CountDownTimer(tempsNecessaireALaLecture(infoListe.item(0).getNodeValue()), 1000)
-				{
-					public void onTick(long millisUntilFinished) 
-					{
-						toast.show();
-						
-						//On cache le spinner quand on trouve notre arbre
-						ProgressBar pg = (ProgressBar) findViewById(R.id.progressBar1);
-						pg.setVisibility(View.INVISIBLE);
-						
-						//On cache le "En cours de recherche"
-						TextView txt = (TextView) findViewById(R.id.textView1);
-						txt.setVisibility(View.INVISIBLE);
-						
-						//On cache le "placez votre tablette..."
-						TextView txt2 = (TextView) findViewById(R.id.textView2);
-						txt2.setVisibility(View.INVISIBLE);
-						
-						//On cache le bouton "chercher"
-						afficherPositionGeo = (Button) findViewById(R.id.bouton_recup_coordGeo);
-						afficherPositionGeo.setVisibility(View.INVISIBLE);
-						
-					}
-					public void onFinish() 
-					{
-						toast.show();
-						
-						//On affiche le spinner quand on trouve notre arbre
-						ProgressBar pg = (ProgressBar) findViewById(R.id.progressBar1);
-						pg.setVisibility(View.VISIBLE);
-						
-						//On affiche le "En cours de recherche"
-						TextView txt = (TextView) findViewById(R.id.textView1);
-						txt.setVisibility(View.VISIBLE);
-						
-						//On affiche le "placez votre tablette..."
-						TextView txt2 = (TextView) findViewById(R.id.textView2);
-						txt2.setVisibility(View.VISIBLE);
-						
-						//On affiche le bouton "chercher"
-						afficherPositionGeo = (Button) findViewById(R.id.bouton_recup_coordGeo);
-						afficherPositionGeo.setVisibility(View.VISIBLE);						
-						
-						//S'il n y a plus de texte, notre icône n'a plus lieu d'être
-						audioIcon.setVisibility(View.INVISIBLE);
-					}
-				}.start();
 			}
 		}
 	}
@@ -744,6 +675,119 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 	public void onClick(View arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+	//----------------------------------------------------------------
+	//Tarik 26/04/2013 : On affiche le toast relatif à un arbre
+	// Le temps d'affichage d'un toast dépend de la longueur
+	// de son texte.
+	//----------------------------------------------------------------
+	public void afficherInfosArbre(String titreArbre, String infosArbre, String imageArbre)
+	{
+		int treeResID = getResources().getIdentifier(imageArbre, "drawable", getPackageName());
+		LayoutInflater inflater = getLayoutInflater();
+		View layout = inflater.inflate(R.layout.activity_navigation_treetoast,
+		(ViewGroup) findViewById(R.id.toast_layout_root));
+		ImageView image = (ImageView) layout.findViewById(R.id.image);
+		image.setImageResource(treeResID);
+		
+		
+		/* Tarik 27/04/2013: On affiche l'icône */
+		final ImageView audioIcon = (ImageView)findViewById(R.id.audioIcon);
+		audioIcon.setVisibility(View.VISIBLE);
+		audioIcon.setImageResource(R.drawable.audio);
+		
+		final String texteArbre= infosArbre;
+		
+		// On désactive la voix ou on la réactive
+		audioIcon.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                if(!flag)
+                {
+                	audioIcon.setImageResource(R.drawable.audio);
+                	flag=true;
+                	//On coupe le son
+                	tts.stop();
+                }
+                else
+                {       
+                    audioIcon.setImageResource(R.drawable.audio_stopped);
+                    flag=false;
+                    //On active le son
+                    lisTexteArbre(texteArbre);
+                    
+                }
+            }
+        });
+		
+		
+		//Tarik: 26/04/2013: On affiche notre beau texte, avec le nom de l'arbre d'abord, suivi de sa description ensuite
+		TextView text = (TextView) layout.findViewById(R.id.text);
+		text.setText(titreArbre+"\n\n"+ "\n" + infosArbre);
+
+		//Tarik: 26/04/2013: On lit notre texte retrived du xml
+		tts.speak(infosArbre, TextToSpeech.QUEUE_ADD,  null);
+		
+		
+		final Toast toast = new Toast(getApplicationContext());
+		toast.setView(layout);
+		
+		
+		
+		/* Tarik 26/04/2013: Bah là on définit le temps de l'affichage de l'info de l'arbre
+		* Sur une base expérimentale faite avec mes soins qui affiche le texte avec le temps
+		* nécessaire pour le lire en dépend de sa longueur, en partant sur une base de 1sec=1000 milsec
+		* 
+		*/
+		
+		new CountDownTimer(tempsNecessaireALaLecture(infosArbre), 1000)
+		{
+			public void onTick(long millisUntilFinished) 
+			{
+				toast.show();
+				
+				//On cache le spinner quand on trouve notre arbre
+				ProgressBar pg = (ProgressBar) findViewById(R.id.progressBar1);
+				pg.setVisibility(View.INVISIBLE);
+				
+				//On cache le "En cours de recherche"
+				TextView txt = (TextView) findViewById(R.id.textView1);
+				txt.setVisibility(View.INVISIBLE);
+				
+				//On cache le "placez votre tablette..."
+				TextView txt2 = (TextView) findViewById(R.id.textView2);
+				txt2.setVisibility(View.INVISIBLE);
+				
+				//On cache le bouton "chercher"
+				afficherPositionGeo = (Button) findViewById(R.id.bouton_recup_coordGeo);
+				afficherPositionGeo.setVisibility(View.INVISIBLE);
+				
+			}
+			public void onFinish() 
+			{
+				toast.show();
+				
+				//On affiche le spinner quand on trouve notre arbre
+				ProgressBar pg = (ProgressBar) findViewById(R.id.progressBar1);
+				pg.setVisibility(View.VISIBLE);
+				
+				//On affiche le "En cours de recherche"
+				TextView txt = (TextView) findViewById(R.id.textView1);
+				txt.setVisibility(View.VISIBLE);
+				
+				//On affiche le "placez votre tablette..."
+				TextView txt2 = (TextView) findViewById(R.id.textView2);
+				txt2.setVisibility(View.VISIBLE);
+				
+				//On affiche le bouton "chercher"
+				afficherPositionGeo = (Button) findViewById(R.id.bouton_recup_coordGeo);
+				afficherPositionGeo.setVisibility(View.VISIBLE);						
+				
+				//S'il n y a plus de texte, notre icône n'a plus lieu d'être
+				audioIcon.setVisibility(View.INVISIBLE);
+			}
+		}.start();
 	}
 
 }
