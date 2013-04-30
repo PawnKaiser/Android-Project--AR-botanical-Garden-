@@ -117,7 +117,7 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 	MediaPlayer mp;
 	/* XML Parsing (Information Display) */
 	ImageView image;
-	
+	Toast toast;
 	
 	
 	//----------------------------------------------------------------------
@@ -128,8 +128,9 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_navigation);
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
-		mp = MediaPlayer.create(getBaseContext(), R.raw.main_track);
 		
+		
+		toastInit();
 		//---------------------------------
 		/*Tarik 26/04/2013: Musique */
 		//---------------------------------
@@ -157,14 +158,20 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 	//----------------------------------------------------------------------	
 	@Override
 	public void onDestroy() {
-		// On coupe le son
-		if (tts != null) {
-			tts.stop();
-			tts.shutdown();
-		}
 		
-        finish();   
 		super.onDestroy();
+		
+		// On coupe le son
+		tts.stop();
+		tts.shutdown();
+		
+		// On coupe la musique
+		mp.stop();	
+		
+		// On détruit lapopup
+		toast.cancel();
+        finish();   
+		
 	}
 
 	//----------------------------------------------------------------------
@@ -201,13 +208,19 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 	//TARIK 26/04/2013: Initialisateurs de notre Appli
 	----------------------------------------------------------
 	---------------------------------------------------------*/	
-	
+	//---------------------------------------------------------
+	//Tarik 30/04/2013: Initialisation de la popup
+	//---------------------------------------------------------
+	private void toastInit()
+	{
+		toast = new Toast(getApplicationContext());
+	}
 	//---------------------------------------------------------
 	//Tarik 27/04/2013: Initialisation de la musique d'intro
 	//---------------------------------------------------------
 	private void musicInit()
 	{	
-		
+		mp = MediaPlayer.create(getBaseContext(), R.raw.main_track);
 		mp.start();
 		
 		/* Tarik 30/04/2013: On affiche l'icône */
@@ -730,7 +743,7 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 		tts.speak(infosArbre, TextToSpeech.QUEUE_ADD,  null);
 		
 		
-		final Toast toast = new Toast(getApplicationContext());
+		
 		toast.setView(layout);
 		
 		
