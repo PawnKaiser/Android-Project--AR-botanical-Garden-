@@ -7,15 +7,11 @@
     <string name="TitleSplashScreen">The botanical garden  \n\t lovin it !</string>
     <string name="title_activity_navigation">Navigation</string>
     <string name="hello_world">Hello world!</string>
-    <string-array name="Splash_message">
-        <item >Starting animation ...</item>
-        <item >parsing hotspots ...</item>
-        <item >calculating Bounding box ...</item>
-        <item >registrate the broadcast receiver ...</item>
-        <item >Ready !</item>
-    </string-array>
-        <string name="titleSplash">Loading app resources ...</string>
-        <string name="Ready">App Ready</string>
-        <string name="powered">Powered by Gr1 staff</string>
+    <string name="titleSplash">Loading app resources ...</string>
+    <string name="Ready">App Ready</string>
+    <string name="powered">Powered by Gr1 staff</string>
+    <string name="ApiKey">0xghmMgk1rUcautjHM0lJ60KyMbiHq9XQZnYZPA</string>
+    <string name="title_activity_hotspot">Hotspot</string>
+    <string name="title_activity_view">View</string>
 
 </resources>

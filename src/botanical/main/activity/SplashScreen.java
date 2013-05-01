@@ -45,7 +45,7 @@ public class SplashScreen extends Activity {
 		/**
 		 * todo task
 		 *  	XML animation
-		 *  	startinf the navigation activty with :
+		 *  	starting the navigation activty after :
 		 * 			parse the location data file
 		 * 			passing a list of the hotspot data and bounding box
 		 * 		stating the broadcast receiver 	
@@ -75,7 +75,7 @@ public class SplashScreen extends Activity {
                 }
             }
         }).start();
-       
+
 	}
 	
 	 /**
@@ -135,7 +135,8 @@ public class SplashScreen extends Activity {
 			AnimateandSlideShow();
 			 this.runOnUiThread(
 				 new Runnable(){
-	                 public void run(){
+	                 @Override
+					public void run(){
 	                     TextView txtView = (TextView)findViewById(R.id.textView2);
 	                         txtView.setText("Starting XML animation ...");
 	                      }
@@ -150,7 +151,8 @@ public class SplashScreen extends Activity {
 			    
 			    this.runOnUiThread(
 		                new Runnable(){
-		                    public void run(){
+		                    @Override
+							public void run(){
 		                        TextView txtView = (TextView)findViewById(R.id.textView2);
 		                            txtView.setText("Generating the hotspots data ...");
 		                         }
@@ -165,12 +167,13 @@ public class SplashScreen extends Activity {
 				 boundingBoxs = new ArrayList<BoundingBox>();
 				Iterator<HotSpotModel> it = hotspots.iterator();
 				while (it.hasNext()) {
-					HotSpotModel hotSpotModel = (HotSpotModel) it.next();
+					HotSpotModel hotSpotModel = it.next();
 					boundingBoxs.add( new BoundingBox(hotSpotModel.getLagitude(), hotSpotModel.getLongitude()));	
 				}
 				 this.runOnUiThread(
 			                new Runnable(){
-			                    public void run(){
+			                    @Override
+								public void run(){
 			                        TextView txtView = (TextView)findViewById(R.id.textView2);
 			                            txtView.setText("Computing the bounding boxs ...");
 			                         }
@@ -183,7 +186,8 @@ public class SplashScreen extends Activity {
 				//	registerBroadcastReceiver();	
 					this.runOnUiThread(
 			                new Runnable(){
-			                    public void run(){
+			                    @Override
+								public void run(){
 			                        TextView txtView = (TextView)findViewById(R.id.textView2);
 			                            txtView.setText("Starting the broadcast receiver ...");
 			                         }
@@ -195,11 +199,13 @@ public class SplashScreen extends Activity {
 					// starting Navigation activity		
 					this.runOnUiThread(
 			                new Runnable(){
-			                    public void run(){
+			                    @Override
+								public void run(){
 			                        TextView txtView = (TextView)findViewById(R.id.textView2);
 			                            txtView.setText("App ready, launching ...");
 			                         }
 			                });
+					this.finish();
 					 Intent intent = new Intent(this, Navigation.class);
 				     startActivity(intent);
 					return 100;
