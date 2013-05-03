@@ -1,7 +1,5 @@
 package botanical.main.Parser;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 

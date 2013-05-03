@@ -13,6 +13,7 @@
     <string name="ApiKey">0xghmMgk1rUcautjHM0lJ60KyMbiHq9XQZnYZPA</string>
     <string name="title_activity_hotspot">Hotspot</string>
     <string name="title_activity_view">View</string>
+    <string name="quit">Quit</string>
    
 
 </resources>

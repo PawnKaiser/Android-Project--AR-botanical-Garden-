@@ -1,10 +1,6 @@
 package botanical.main.activity;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -14,9 +10,7 @@ import android.view.Menu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import botanical.main.Parser.DomParser;
 import botanical.main.broadcastReceiver.NavigationBR;
-import botanical.main.util.HotSpotModel;
 
 import com.example.mouddeneandroidproject.R;
 /**

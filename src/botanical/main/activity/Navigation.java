@@ -67,7 +67,7 @@ public class Navigation extends MapActivity {
 		 
 		
         for (Iterator<HotSpotModel> iterator = hotspots.iterator(); iterator.hasNext();) {
-			  HotSpotModel hsm = (HotSpotModel) iterator.next();  
+			  HotSpotModel hsm = iterator.next();  
 			  GeoPoint p = new GeoPoint((int)(hsm.getLagitude() * 1e6),(int)(hsm.getLongitude() * 1e6));
 			  overlayitem = new OverlayItem(p, hsm.getId(), "");
 			  itemizedoverlay.addOverlay(overlayitem);	  

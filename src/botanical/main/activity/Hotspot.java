@@ -1,12 +1,10 @@
 package botanical.main.activity;
 
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import botanical.main.services.TTS;
@@ -18,7 +16,6 @@ public class Hotspot extends Activity {
 	
 	
 	private HotSpotModel hsm  ;
-	private View image;
 	
 
 	@Override
@@ -28,7 +25,8 @@ public class Hotspot extends Activity {
 		
 		
 		Intent intent = new Intent(this, TTS.class);
-		PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
+	//	PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
+		
 		
 		
 		Bundle b = this.getIntent().getExtras();
@@ -36,7 +34,10 @@ public class Hotspot extends Activity {
 	        hsm = (HotSpotModel)getIntent().getSerializableExtra("hotspot");
 		
 		if(hsm != null){
-		
+			
+		//	Button  btn =  (Button) findViewById(R.id.button1);
+			
+			
 			ImageView  image =  (ImageView) findViewById(R.id.imageView1);
 			TextView  text =  (TextView) findViewById(R.id.textView1);
 			

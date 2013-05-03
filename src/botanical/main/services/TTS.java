@@ -62,8 +62,8 @@ public class TTS extends Service implements OnInitListener
 			if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) 
 			Toast.makeText(getBaseContext(), "ERREUR: Le Terminal a un soucis avec la gestion des langues", Toast.LENGTH_SHORT);
 			else {
-				tts.setSpeechRate((float) TEMPO_VOIX);
-				tts.setPitch((float) PUISSANCE_VOIX);
+				tts.setSpeechRate(TEMPO_VOIX);
+				tts.setPitch(PUISSANCE_VOIX);
 				tts.speak(introText, TextToSpeech.QUEUE_FLUSH,  null);
 			}
 		} 

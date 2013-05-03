@@ -41,15 +41,14 @@ public final class R {
         public static final int LinearLayout1=0x7f0a0004;
         public static final int LinearLayout2=0x7f0a0000;
         public static final int RelativeLayout1=0x7f0a0006;
-        public static final int action_settings=0x7f0a000c;
+        public static final int action_settings=0x7f0a000b;
         public static final int button1=0x7f0a0007;
-        public static final int button2=0x7f0a0008;
         public static final int imageView1=0x7f0a0001;
         public static final int mapView=0x7f0a0005;
-        public static final int progressBar1=0x7f0a0009;
+        public static final int progressBar1=0x7f0a0008;
         public static final int textView1=0x7f0a0002;
-        public static final int textView2=0x7f0a000a;
-        public static final int textView3=0x7f0a000b;
+        public static final int textView2=0x7f0a0009;
+        public static final int textView3=0x7f0a000a;
     }
     public static final class layout {
         public static final int activity_hotspot=0x7f030000;
@@ -77,6 +76,7 @@ public final class R {
         public static final int hello_world=0x7f06000b;
         public static final int navigation_header=0x7f060008;
         public static final int powered=0x7f06000e;
+        public static final int quit=0x7f060012;
         public static final int titleSplash=0x7f06000c;
         public static final int title_activity_hotspot=0x7f060010;
         public static final int title_activity_navigation=0x7f06000a;

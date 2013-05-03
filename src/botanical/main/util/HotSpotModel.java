@@ -1,7 +1,6 @@
 package botanical.main.util;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class HotSpotModel implements Serializable {
 	

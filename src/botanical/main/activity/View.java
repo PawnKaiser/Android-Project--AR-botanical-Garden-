@@ -1,12 +1,10 @@
 package botanical.main.activity;
 
-import com.example.mouddeneandroidproject.R;
-import com.example.mouddeneandroidproject.R.layout;
-import com.example.mouddeneandroidproject.R.menu;
-
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.Menu;
+
+import com.example.mouddeneandroidproject.R;
 
 public class View extends Activity {
 
