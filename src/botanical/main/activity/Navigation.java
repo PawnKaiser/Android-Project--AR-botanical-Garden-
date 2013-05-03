@@ -34,6 +34,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
 
@@ -43,7 +44,6 @@ import org.w3c.dom.Element;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -89,11 +89,10 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 	private static final float PUISSANCE_VOIX = (float) 0.7;
 	private static final float TEMPO_VOIX = (float) 0.8;
 	private boolean flag=false;
-	private boolean flagMusique=false;
 	
 	/* Tarik 26/04/2013: Texte Introductif qui sera lu à l'initialisation du TTS
 	*/
-	private String introText = "Tarik vous souhaite la bienvenue à l'Arboretum !, Monsieur Mehdi, comme vous pouvez le voir, la voix (ou le TTS), fonctionne parfaitement !";
+	private String introText = "Bonjour Monsieur, si vous écoutez ce message c'est que vous êtes entrain d'utiliser notre application pour l'arboretum. Bien qu'il n y ait pas de carte de navigation, il suffit néanmoins de se placer simplement face à un arbre pour que les informations relatives à cet arbre s'enclenche. Le Mode TTS est de même, activé pour les personnes aveugles. Bonne Navigation";
 	
 	
 	
@@ -128,13 +127,15 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_navigation);
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
-		
-		
+	
+		//---------------------------------
+		/*Tarik 03/05/2013: Animation */
+		//--------------------------------
+		animationInit();
+		//---------------------------------
+		/*Tarik 03/05/2013: toast */
+		//--------------------------------
 		toastInit();
-		//---------------------------------
-		/*Tarik 26/04/2013: Musique */
-		//---------------------------------
-		musicInit();
 		//---------------------------------
 		/*Tarik 26/04/2013: Voix */
 		//--------------------------------
@@ -165,9 +166,6 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 		tts.stop();
 		tts.shutdown();
 		
-		// On coupe la musique
-		mp.stop();	
-		
 		// On détruit lapopup
 		toast.cancel();
         finish();   
@@ -184,81 +182,43 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 	  inflater.inflate(R.menu.navigation_menu, menu);
 	  return true;
 	}
-	//----------------------------------------------------------------------
-	//Tarik 27/04/2013: on active ou on désactive la musique
-	//----------------------------------------------------------------------
-	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-	    switch(item.getItemId()) {
-	        case(R.id.item1):
-	            if(item.isChecked()) {
-	                item.setChecked(false);
-	                musicStop();
-	            } else {
-						musicInit();
-	            }
-	            break;
-	        default:
-	            return super.onContextItemSelected(item);
-	    }
-	    return true;
-	}
 	/*--------------------------------------------------------
 	----------------------------------------------------------
 	//TARIK 26/04/2013: Initialisateurs de notre Appli
 	----------------------------------------------------------
 	---------------------------------------------------------*/	
+	
+	private void animationInit() 
+	{
+
+		final Handler handler = new Handler();
+	    new Thread(new Runnable() {
+	        @Override
+	        public void run() {
+	        int timeToBlink = 1000;    //in milissegunds
+	        try{Thread.sleep(timeToBlink);}catch (Exception e) {}
+	            handler.post(new Runnable() {
+	                @Override
+	                    public void run() {
+	                    TextView txt = (TextView) findViewById(R.id.TextView01);
+	                    if(txt.getVisibility() == View.VISIBLE){
+	                        txt.setVisibility(View.INVISIBLE);
+	                    }else{
+	                        txt.setVisibility(View.VISIBLE);
+	                    }
+	                    animationInit();
+	                }
+	                });
+	            }
+	        }).start();
+	 }
+	
 	//---------------------------------------------------------
 	//Tarik 30/04/2013: Initialisation de la popup
 	//---------------------------------------------------------
 	private void toastInit()
 	{
 		toast = new Toast(getApplicationContext());
-	}
-	//---------------------------------------------------------
-	//Tarik 27/04/2013: Initialisation de la musique d'intro
-	//---------------------------------------------------------
-	private void musicInit()
-	{	
-		mp = MediaPlayer.create(getBaseContext(), R.raw.main_track);
-		mp.start();
-		
-		/* Tarik 30/04/2013: On affiche l'icône */
-		final ImageView musicIcon = (ImageView)findViewById(R.id.musicIcon);
-		musicIcon.setVisibility(View.VISIBLE);
-		musicIcon.setImageResource(R.drawable.music);
-		
-		// On désactive la musique ou on la réactive
-		musicIcon.setOnClickListener(new OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                if(!flagMusique)
-                {
-                	musicIcon.setImageResource(R.drawable.music);
-                	flagMusique=true;
-                	
-                	//On coupe la musique
-                	musicStop();
-            		
-                }
-                else
-                {       
-                	musicIcon.setImageResource(R.drawable.music_stopped);
-                	flagMusique=false;
-                	
-                	//On rééclenche la musique
-                	mp.start();
-                }
-            }
-        });		
-	}
-	//---------------------------------------------------------
-	//Tarik 30/04/2013: Arrêt de la musique d'intro
-	//---------------------------------------------------------
-	private void musicStop()
-	{
-		mp.pause();
 	}
 
 	//------------------------------------------------
@@ -803,4 +763,5 @@ public class Navigation extends Activity implements SensorEventListener,TextToSp
 		}.start();
 	}
 
-}
+	
+}//ClassEND

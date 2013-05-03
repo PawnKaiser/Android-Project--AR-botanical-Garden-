@@ -9,7 +9,7 @@ package com.example.gp1androidproject;
 
 public final class R {
     public static final class array {
-        public static final int Splash_message=0x7f070000;
+        public static final int trees_array=0x7f070000;
     }
     public static final class attr {
     }
@@ -31,31 +31,39 @@ public final class R {
         public static final int music=0x7f020004;
         public static final int music_stopped=0x7f020005;
         public static final int sapin=0x7f020006;
-        public static final int sequoia=0x7f020007;
-        public static final int toast_border=0x7f020008;
+        public static final int scale=0x7f020007;
+        public static final int sequoia=0x7f020008;
+        public static final int toast_border=0x7f020009;
     }
     public static final class id {
-        public static final int RelativeLayout1=0x7f0a0000;
-        public static final int TextView01=0x7f0a0002;
-        public static final int action_settings=0x7f0a000f;
-        public static final int audioIcon=0x7f0a0005;
-        public static final int bouton_recup_coordGeo=0x7f0a0001;
-        public static final int image=0x7f0a000c;
-        public static final int item1=0x7f0a000e;
-        public static final int musicIcon=0x7f0a0006;
-        public static final int progressBar1=0x7f0a0003;
-        public static final int text=0x7f0a000d;
-        public static final int textView1=0x7f0a0004;
-        public static final int textView2=0x7f0a0007;
-        public static final int textView3=0x7f0a0008;
-        public static final int textView4=0x7f0a000a;
-        public static final int textView5=0x7f0a0009;
-        public static final int toast_layout_root=0x7f0a000b;
+        public static final int RelativeLayout1=0x7f0a0008;
+        public static final int TextView01=0x7f0a0006;
+        public static final int action_settings=0x7f0a0013;
+        public static final int audioIcon=0x7f0a000e;
+        public static final int bouton_recup_coordGeo=0x7f0a0009;
+        public static final int buttonListeArbres=0x7f0a0002;
+        public static final int buttonNous=0x7f0a0007;
+        public static final int buttonVisite=0x7f0a0003;
+        public static final int image=0x7f0a0010;
+        public static final int item1=0x7f0a0012;
+        public static final int musicIcon=0x7f0a0004;
+        public static final int progressBar1=0x7f0a000a;
+        public static final int text=0x7f0a0011;
+        public static final int textView1=0x7f0a0000;
+        public static final int textView2=0x7f0a000b;
+        public static final int textView3=0x7f0a0005;
+        public static final int textView4=0x7f0a000d;
+        public static final int textView5=0x7f0a000c;
+        public static final int toast_layout_root=0x7f0a000f;
+        public static final int treesList=0x7f0a0001;
     }
     public static final class layout {
-        public static final int activity_navigation=0x7f030000;
-        public static final int activity_navigation_treetoast=0x7f030001;
-        public static final int activity_splash_screen=0x7f030002;
+        public static final int activity_apropos=0x7f030000;
+        public static final int activity_listearbres=0x7f030001;
+        public static final int activity_mainmenu=0x7f030002;
+        public static final int activity_navigation=0x7f030003;
+        public static final int activity_navigation_treetoast=0x7f030004;
+        public static final int activity_splash_screen=0x7f030005;
     }
     public static final class menu {
         public static final int navigation_menu=0x7f090000;
@@ -68,10 +76,12 @@ public final class R {
         public static final int Ready=0x7f060007;
         public static final int TitleSplashScreen=0x7f060003;
         public static final int TitleSplashScreen_fr=0x7f06000d;
+        public static final int aPropos=0x7f06001e;
         public static final int action_settings=0x7f060001;
         public static final int advice_fr=0x7f06000c;
         public static final int afficheLongLat_fr=0x7f060010;
         public static final int app_name=0x7f060000;
+        public static final int apropos=0x7f060020;
         public static final int arboretum=0x7f060009;
         public static final int arbre_img=0x7f060017;
         public static final int audio_icon=0x7f060019;
@@ -81,6 +91,8 @@ public final class R {
         public static final int geoPosition_fr=0x7f060018;
         public static final int hello_world=0x7f060005;
         public static final int latitude_fr=0x7f06000e;
+        public static final int listArbresTitle=0x7f06001f;
+        public static final int listeArbres=0x7f06001c;
         public static final int longitude_fr=0x7f06000f;
         public static final int music_icon=0x7f06001b;
         public static final int navigation_header=0x7f060002;
@@ -93,6 +105,7 @@ public final class R {
         public static final int treeDescription_fr=0x7f060014;
         public static final int treeInformationTitle_fr=0x7f060015;
         public static final int tree_img=0x7f060016;
+        public static final int visiteGuidee=0x7f06001d;
     }
     public static final class style {
         /** 

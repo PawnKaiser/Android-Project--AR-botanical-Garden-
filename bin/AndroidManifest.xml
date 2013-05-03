@@ -33,6 +33,15 @@
             android:name="botanical.main.activity.Navigation"
             android:label="@string/title_activity_navigation" >
         </activity>
+        <activity
+            android:name="botanical.main.activity.MainMenu" >
+        </activity>
+ 		<activity
+            android:name="botanical.main.activity.Apropos" >
+        </activity>
+        <activity
+            android:name="botanical.main.activity.ListeArbres" >
+        </activity>        
     </application>
 
 </manifest>

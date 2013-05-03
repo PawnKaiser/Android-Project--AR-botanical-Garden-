@@ -11,13 +11,11 @@ import android.os.Handler;
 import android.view.Menu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-import botanical.main.broadcastReceiver.NavigationBR;
 
 import com.example.gp1androidproject.R;
 /**
 * 
-* @author mouddene
+* @author mouddene, gilani modified it for a sake of simplicity [03/05/2013]
 *
 */
 public class SplashScreen extends Activity {
@@ -25,8 +23,6 @@ public class SplashScreen extends Activity {
 	private ProgressBar pb;
 	private int mProgressStatus = 0;	
 	private Handler mHandler = new Handler();
-	public static final String BROADCAST = "android.location.PROVIDERS_CHANGED";
-	private NavigationBR broadcatReceiver = new NavigationBR(); 
 	protected ProgressDialog mProgressDialog;
 
 
@@ -77,32 +73,6 @@ public class SplashScreen extends Activity {
 		
 	}
 	
-	/**
-	* This method enables the Broadcast receiver for
-	* 'android.intent.action.TIME_TICK' intent. This intent get
-	* broadcasted every minute.
-	*
-	* @param view
-	*/
-	public void registerBroadcastReceiver() {
-		// we have to create an unique string to identify the intent
-		IntentFilter filtre = new IntentFilter("mouddene.el.mehdi.broadcast");
-		registerReceiver(broadcatReceiver, filtre);
-	}
-
-	/**
-	* This method disables the Broadcast receiver
-	*
-	* @param view
-	*/
-	public void unregisterBroadcastReceiver() {
-
-		this.unregisterReceiver(broadcatReceiver);
-
-		Toast.makeText(this,"unregistered broadcst receiver", Toast.LENGTH_SHORT)
-		.show();
-	}
-	
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -147,6 +117,7 @@ public class SplashScreen extends Activity {
 			this.runOnUiThread(
 			new Runnable(){
 				public void run(){
+					
 					TextView txtView = (TextView)findViewById(R.id.textView2);
 					txtView.setText("Génération des Données ...");
 				}
@@ -155,12 +126,12 @@ public class SplashScreen extends Activity {
 			return 40;
 		}else
 		
-		if(mProgressStatus == 60){
+		if(mProgressStatus == 40){
 			this.runOnUiThread(
 			new Runnable(){
 				public void run(){
 					TextView txtView = (TextView)findViewById(R.id.textView2);
-					txtView.setText("Lancement du Broadcast Receiver ...");
+					txtView.setText("Lancement des services ...");
 				}
 			});
 			return 80;
@@ -176,8 +147,9 @@ public class SplashScreen extends Activity {
 					txtView.setText("Application prête, Lancement ...");
 				}
 			});
-			Intent intent = new Intent(this, Navigation.class);
+			Intent intent = new Intent(this, MainMenu.class);
 			startActivity(intent);
+			finish();
 			return 100;
 		}
 	}

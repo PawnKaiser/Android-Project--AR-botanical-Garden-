@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_background"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/buttonListeArbres"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="112dp"
+        android:text="@string/listeArbres" />
+
+    <Button
+        android:id="@+id/buttonVisite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/buttonListeArbres"
+        android:layout_alignRight="@+id/buttonListeArbres"
+        android:layout_below="@+id/buttonListeArbres"
+        android:text="@string/visiteGuidee" />
+
+    <ImageView
+        android:id="@+id/musicIcon"
+        android:layout_width="52dp"
+        android:layout_height="42dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@string/music_icon"
+        android:src="@drawable/music"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/powered_fr" />
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/TitleSplashScreen_fr"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="45sp" />
+
+    <Button
+        android:id="@+id/buttonNous"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/buttonVisite"
+        android:layout_alignRight="@+id/buttonVisite"
+        android:layout_below="@+id/buttonVisite"
+        android:text="@string/aPropos" />
+
+</RelativeLayout>

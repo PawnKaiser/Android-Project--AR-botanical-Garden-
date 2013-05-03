@@ -26,7 +26,7 @@
         android:layout_alignParentTop="true"
         android:text="@string/TitleSplashScreen_fr"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="36sp" />
+        android:textSize="40sp" />
 
     <ProgressBar
         android:id="@+id/progressBar1"
@@ -36,30 +36,6 @@
         android:layout_below="@+id/TextView01"
         android:layout_marginTop="26dp"
         android:layout_toRightOf="@+id/textView1" />
-
-    <ImageView
-        android:id="@+id/audioIcon"
-        android:layout_width="52dp"
-        android:layout_height="42dp"
-        android:layout_alignRight="@+id/TextView01"
-        android:layout_alignTop="@+id/TextView01"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:contentDescription="@string/audio_icon"
-        android:src="@drawable/audio"
-        android:visibility="visible" />
-
-    <ImageView
-        android:id="@+id/musicIcon"
-        android:layout_width="52dp"
-        android:layout_height="42dp"
-        android:layout_alignRight="@+id/TextView01"
-        android:layout_alignTop="@+id/TextView01"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="70dp"
-        android:contentDescription="@string/music_icon"
-        android:src="@drawable/music"
-        android:visibility="visible" />
 
     <TextView
         android:id="@+id/textView1"
@@ -103,5 +79,15 @@
         android:layout_alignLeft="@+id/textView1"
         android:layout_below="@+id/textView5"
         android:text="@string/compass2" />
+
+    <ImageView
+        android:id="@+id/audioIcon"
+        android:layout_width="52dp"
+        android:layout_height="42dp"
+        android:layout_alignRight="@+id/TextView01"
+        android:layout_alignTop="@+id/bouton_recup_coordGeo"
+        android:contentDescription="@string/audio_icon"
+        android:src="@drawable/audio"
+        android:visibility="invisible" />
 
 </RelativeLayout>
