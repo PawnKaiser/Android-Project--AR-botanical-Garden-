@@ -5,8 +5,8 @@ import java.util.ArrayList;
 public class HotSpotModel {
 	
 	private String id; 
-	private float longitude;
-	private float latitude;
+	private double longitude;
+	private double latitude;
 	private ArrayList<Node> trees = new ArrayList<Node>();
 	
 	
@@ -24,13 +24,13 @@ public class HotSpotModel {
 	/**
 	 * @return the longitude
 	 */
-	public float getLongitude() {
+	public double getLongitude() {
 		return longitude;
 	}
 	/**
 	 * @return the lagitude
 	 */
-	public float getLagitude() {
+	public double getLagitude() {
 		return latitude;
 	}
 
@@ -52,15 +52,29 @@ public class HotSpotModel {
 	/**
 	 * @param longitude the longitude to set
 	 */
-	public void setLongitude(float longitude) {
+	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
 
 	/**
 	 * @param lagitude the lagitude to set
 	 */
-	public void setLagitude(float lagitude) {
+	public void setLagitude(double lagitude) {
 		this.latitude = lagitude;
+	}
+
+	/**
+	 * @return the trees
+	 */
+	public ArrayList<Node> getTrees() {
+		return trees;
+	}
+
+	/**
+	 * @param trees the trees to set
+	 */
+	public void setTrees(ArrayList<Node> trees) {
+		this.trees = trees;
 	}
 
 	

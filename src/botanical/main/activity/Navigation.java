@@ -1,5 +1,6 @@
 package botanical.main.activity;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -17,7 +18,6 @@ import com.example.mouddeneandroidproject.R;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
-import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
@@ -27,7 +27,10 @@ import com.google.android.maps.OverlayItem;
  *
  */
 public class Navigation extends MapActivity {
+	
+	ArrayList<HotSpotModel> hotspots = new ArrayList<HotSpotModel>();
 
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -39,16 +42,11 @@ public class Navigation extends MapActivity {
 		//fetch the map view from the layout
         MapView mapView = (MapView) findViewById(R.id.mapView);
         
-        //hybrid map
-        
+        //hybrid map 
         populateMap(mapView);
-     
 	}
 
-	
-	
-	private void populateMap(MapView mapView){
-		
+	private void populateMap(MapView mapView){	
 		 //set the local position in the map
        // MyLocationOverlay mylocationOverlay = new MyLocationOverlay(this, mapView);
        // mylocationOverlay.enableMyLocation();
@@ -56,26 +54,28 @@ public class Navigation extends MapActivity {
         
         //add all hotspot location
         
-        List<Overlay> mapOverlays = mapView.getOverlays();
-        Drawable drawable = this.getResources().getDrawable(R.drawable.marker);
-        HotspotItemizedOverlay itemizedoverlay = new HotspotItemizedOverlay(drawable, this);
-        
+		List<Overlay> mapOverlays = mapView.getOverlays();
+		Drawable drawable = this.getResources().getDrawable(R.drawable.marker);
+		HotspotItemizedOverlay itemizedoverlay = new HotspotItemizedOverlay(drawable, this);
+		OverlayItem overlayitem;
         
         /***********************************************************************
          * loop recovering all the hotspot data.
          */
-        
-
-        
-        for (Iterator<HotSpotModel> iterator = SplashScreen.hotspots.iterator(); iterator.hasNext();) {
-			 HotSpotModel hsm = (HotSpotModel) iterator.next();
-			 
-			 GeoPoint p = new GeoPoint((int)(hsm.getLagitude() * 1e6),(int)(hsm.getLongitude() * 1e6));
-			 
-			  itemizedoverlay.addOverlay( new OverlayItem(p, hsm.getId(), hsm.getId()));
+		hotspots =new DomParser(this).parseHotspot();
+		 
+		
+        for (Iterator<HotSpotModel> iterator = hotspots.iterator(); iterator.hasNext();) {
+			  HotSpotModel hsm = (HotSpotModel) iterator.next();  
+			  GeoPoint p = new GeoPoint((int)(hsm.getLagitude() * 1e6),(int)(hsm.getLongitude() * 1e6));
+			  overlayitem = new OverlayItem(p, hsm.getId(), "");
+			  itemizedoverlay.addOverlay(overlayitem);	  
 		}
+        
+		mapOverlays.add(itemizedoverlay);
+	
+        
 
-        mapOverlays.add(itemizedoverlay);
 		
 	}
 	
@@ -93,5 +93,10 @@ public class Navigation extends MapActivity {
 	}
 	
 	
-
+	
+			      
+	
+	
+	
+	
 }

@@ -1,8 +1,10 @@
 package botanical.main.activity;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -29,7 +31,6 @@ public class SplashScreen extends Activity {
     private Handler mHandler = new Handler();
 	public static final String BROADCAST = "android.location.PROVIDERS_CHANGED";
     private NavigationBR broadcatReceiver = new NavigationBR(); 
-    public static  ArrayList<HotSpotModel> hotspots;
 	protected ProgressDialog mProgressDialog;
 
 
@@ -143,9 +144,7 @@ public class SplashScreen extends Activity {
 		else
 			if(mProgressStatus == 20){
 				// generate the hotspot
-				DomParser dp = new DomParser("HotspotsLocation.xml");
-			    hotspots = dp.parseHotspot();
-			    
+		
 			    this.runOnUiThread(
 		                new Runnable(){
 		                    @Override

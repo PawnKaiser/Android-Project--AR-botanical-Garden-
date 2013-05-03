@@ -1,6 +1,8 @@
 package botanical.main.Parser;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -11,6 +13,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import android.content.Context;
 import botanical.main.util.HotSpotModel;
 
 /**
@@ -20,34 +23,33 @@ import botanical.main.util.HotSpotModel;
  */
 
 public class DomParser {
+
+	Context mc;
 	
-	private String uri ="";
-	private ArrayList<HotSpotModel> hotspots = new ArrayList<HotSpotModel>();
 	/**
-	 * 
-	 * @param uri
+	 * @param mc
 	 */
-	public DomParser(String uri) {
-		super();
-		this.uri = uri;
+	public DomParser(Context mc) {
+		this.mc = mc;
 	}
 
-
-
-	public ArrayList<HotSpotModel> parseHotspot(){
+	public   ArrayList<HotSpotModel> parseHotspot(){
+		ArrayList<HotSpotModel> hotspots = new ArrayList<HotSpotModel>();
 		try {
-			 
-			File fXmlFile = new File(uri);
+			
+			InputStream is = mc.getApplicationContext().getAssets().open("location.xml");
+			
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(fXmlFile);
-		 
+			Document doc = dBuilder.parse(is);
 			
-			doc.getDocumentElement().normalize();
+			
 		 
+			doc.getDocumentElement().normalize();
+			 
 			System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
 		 
-			NodeList nList = doc.getElementsByTagName("Hotspot");
+			NodeList nList = doc.getElementsByTagName("hotspot");
 		 
 		 
 			for (int temp = 0; temp < nList.getLength(); temp++) {
@@ -62,17 +64,47 @@ public class DomParser {
 					String latitude  = eElement.getElementsByTagName("lat").item(0).getTextContent();
 					String longitude = eElement.getElementsByTagName("lon").item(0).getTextContent();
 					hotspots.add(new HotSpotModel(id, Float.parseFloat(longitude), Float.parseFloat(latitude)));
+					
 				}
 			}
 		    } catch (Exception e) {
-		    	e.printStackTrace();
+			e.printStackTrace();
 		    }
 			return hotspots;
 	}
 	
-	
-	public static void main(String[] args) {
-	 System.out.println(new DomParser("HotspotsLocation.xml").parseHotspot().toString());;
+	private String  getHemi(String s){
+			
+		return s.
 	}
+	
+	private double  getDegree(String s ){
+		
+		return 0.0;
+	}
+	
+	private double  getMin(String s ){
+		
+		return 0.0;
+	}
+	
+	private double  getSec(String s ){
+		
+		return 0.0;
+	}
+	
+	
+	 public double DMSToDecimal(String hemisphereOUmeridien,double degres,double minutes,double secondes)
+	    {
+	            double LatOrLon=0;
+	            double signe=1.0;
 
+	            if((hemisphereOUmeridien.equals("W"))||(hemisphereOUmeridien.equals("S"))) {signe=-1.0;}                
+	            LatOrLon = signe*(Math.floor(degres) + Math.floor(minutes)/60.0 + secondes/3600.0);
+
+	            return(LatOrLon);               
+	    }
+	
+	
+	
 }
