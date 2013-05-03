@@ -50,7 +50,7 @@
             android:label="@string/title_activity_navigation" >
         </activity>
 		<activity
-            android:name="botanical.main.activity.hotSpot.Hotspot"
+            android:name="botanical.main.activity.Hotspot"
             android:label="@string/title_activity_hotspot" >
         </activity>
         <activity

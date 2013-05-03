@@ -12,7 +12,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * 
  * @author mouddene
  * this class handel all hotspot in the XML Location Data
  * on 
@@ -33,7 +32,7 @@ public class DomParser {
 
 
 
-	public ArrayList<HotSpotModel> parse(){
+	public ArrayList<HotSpotModel> parseHotspot(){
 		try {
 			 
 			File fXmlFile = new File(uri);

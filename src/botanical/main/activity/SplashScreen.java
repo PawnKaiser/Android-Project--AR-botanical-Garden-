@@ -1,7 +1,6 @@
 package botanical.main.activity;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import botanical.main.Parser.DomParser;
 import botanical.main.Parser.HotSpotModel;
-import botanical.main.activity.hotSpot.BoundingBox;
 import botanical.main.broadcastReceiver.NavigationBR;
 
 import com.example.mouddeneandroidproject.R;
@@ -31,8 +29,7 @@ public class SplashScreen extends Activity {
     private Handler mHandler = new Handler();
 	public static final String BROADCAST = "android.location.PROVIDERS_CHANGED";
     private NavigationBR broadcatReceiver = new NavigationBR(); 
-    private ArrayList<HotSpotModel> hotspots;
-    private ArrayList<BoundingBox> boundingBoxs;
+    public static  ArrayList<HotSpotModel> hotspots;
 	protected ProgressDialog mProgressDialog;
 
 
@@ -146,8 +143,8 @@ public class SplashScreen extends Activity {
 		else
 			if(mProgressStatus == 20){
 				// generate the hotspot
-				DomParser dp = new DomParser("");
-			    hotspots = dp.parse();
+				DomParser dp = new DomParser("HotspotsLocation.xml");
+			    hotspots = dp.parseHotspot();
 			    
 			    this.runOnUiThread(
 		                new Runnable(){
@@ -158,18 +155,11 @@ public class SplashScreen extends Activity {
 		                         }
 		                });
 			    
-				return 40;
+				return 60;
 			}else
 		
-			if(mProgressStatus == 40){
-				// generate the bounding box
+			if(mProgressStatus == 60){
 				
-				 boundingBoxs = new ArrayList<BoundingBox>();
-				Iterator<HotSpotModel> it = hotspots.iterator();
-				while (it.hasNext()) {
-					HotSpotModel hotSpotModel = it.next();
-					boundingBoxs.add( new BoundingBox(hotSpotModel.getLagitude(), hotSpotModel.getLongitude()));	
-				}
 				 this.runOnUiThread(
 			                new Runnable(){
 			                    @Override
@@ -178,10 +168,10 @@ public class SplashScreen extends Activity {
 			                            txtView.setText("Computing the bounding boxs ...");
 			                         }
 			                });
-				return 60;
+				return 70;
 				
 			}else
-				if(mProgressStatus == 60){
+				if(mProgressStatus == 70){
 					// starting broascast receiver
 				//	registerBroadcastReceiver();	
 					this.runOnUiThread(
