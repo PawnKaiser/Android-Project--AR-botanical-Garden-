@@ -1,10 +1,18 @@
 <resources>
     <string name="Sequoia">le séquoia toujours vert ou séquoia à feuilles d\'if,Sequoia sempervirens (Lamb. ex D. Don) Endl. et le séquoia géant (Sequoiadendron giganteum).</string>
-    <string name="Erablepeau">Erable peu serpent</string>
-    <string name="PlatanedOrient">Platane d Orient</string><string name="HêtreFauFayard">HêtreFauFayard</string>
+    <string name="Erablepeau">ErLe nom Érable à peau de serpent est un nom générique donné à différentesespèces d\'érable 
+        en raison de leur écorcestriée. Certaines de ces espèces sont aussi appelées "érable jaspé" (car leur écorce ressemble également au jaspe). Ces érables appartiennent à la section Macrantha de 
+        la classification des érableset sont tous originaires d\'Asie à l\'exception de Acer pensylvanicum :</string>
+    <string name="PlatanedOrient">Le platane d\'Orient est une espèce d\'arbre de la famille des Platanacéesutilisée comme arbre d\'ornement.
+         Cette espèce anciennement introduite en Europe occidentale a été supplantée par le platane commun.</string>
+    <string name="HêtreFauFayard">Le Hêtre commun (Fagus sylvatica), couramment désigné simplement comme 
+        le Hêtre et parfois appelé fayard est uneespèce d\'arbre 
+        à feuilles caduques,indigène d\'Europe, appartenant à la familledes Fagaceae, tout comme le chêne et lechâtaignier.</string>
     
-    <string name="Rosierchataigné">Rosier chataigné</string>
-    <string name="Peupliernoir">Peuplier noir</string>
-    <string name="MahoniadeBeal">Mahonia de Beal</string>
+    <string name="Rosierchataigné">Le rosier châtaigne (Rosa roxburghii) est une espèce de rosier, classé dans le sous-genre Platyrhodon, originaire de Chine(Anhui, Fujian, Gansu, Guangxi, Guizhou,Hubei, Hunan, Jiangxi, Shaanxi, Sichuan,Yunnan et Zhejiang) ainsi que du Japon.
+
+On le rencontre dans les forêts de montagne, sur les rives des cours d\'eau et sur les pentes entre 500 et 1500 mètres d\'altitude.</string>
+    <string name="MahoniadeBeal">Le mahonia à feuilles de houx est un arbuste à feuillage persistant cultivé dans de nombreux
+         parcs et jardins pour ses feuilles vert vif devenant rouges à l’automne, ses fleurs et ses fruits.</string>
     
 </resources>

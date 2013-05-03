@@ -1,13 +1,21 @@
 package botanical.main.util;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class HotSpotModel {
+public class HotSpotModel implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String id; 
 	private double longitude;
 	private double latitude;
-	private ArrayList<Node> trees = new ArrayList<Node>();
+	
+	private String text;
+	
+	private String ressource;
 	
 	
 	/**
@@ -21,6 +29,24 @@ public class HotSpotModel {
 		this.latitude = latitude;
 	}
 	
+	
+	
+	
+	/**
+	 * @param id
+	 * @param longitude
+	 * @param latitude
+	 * @param trees
+	 */
+	public HotSpotModel(String id, double longitude, double latitude) {
+		this.id = id;
+		this.longitude = longitude;
+		this.latitude = latitude;
+	}
+
+
+
+
 	/**
 	 * @return the longitude
 	 */
@@ -63,18 +89,45 @@ public class HotSpotModel {
 		this.latitude = lagitude;
 	}
 
-	/**
-	 * @return the trees
-	 */
-	public ArrayList<Node> getTrees() {
-		return trees;
-	}
+	
+
+
 
 	/**
-	 * @param trees the trees to set
+	 * @return the text
 	 */
-	public void setTrees(ArrayList<Node> trees) {
-		this.trees = trees;
+	public String getText() {
+		return text;
+	}
+
+
+
+
+	/**
+	 * @param text the text to set
+	 */
+	public void setText(String text) {
+		this.text = text;
+	}
+
+
+
+
+	/**
+	 * @return the ressource
+	 */
+	public String getRessource() {
+		return ressource;
+	}
+
+
+
+
+	/**
+	 * @param ressource the ressource to set
+	 */
+	public void setRessource(String ressource) {
+		this.ressource = ressource;
 	}
 
 	

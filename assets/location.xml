@@ -1,109 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Hotspots>
-
-		<hotspot  id="Soleil">
-			<lat>55°46'37.88"E<lat>
-			<lon>545°11'39.65</lon>
-		</hotspot>
-		<hotspot  id="Terre">
-			<lat>5°46'39.09"E</lat>
-			<lon>45°11'39.42</lon>
-		</hotspot>
-		<hotspot  id="Charme">
-			<lat>5°46'40.15"E</lat>
-			<lon>45°11'39.36</lon>
-		</hotspot>
-		<hotspot  id="Sequoia">
-			<lat>5°46'40.96"E</lat>
-			<lon>45°11'40.04</lon>
-		</hotspot>
-		<hotspot  id="Erable peau serpent / Pin de Corse">
-			<lat>5°46'43.77"E</lat>
-			<lon>45°11'39.86</lon>
-		</hotspot>
-		<hotspot  id="Hêtre Fau Fayard">
-			<lat>5°46'44.91"E</lat>
-			<lon>45°11'40.0</lon>
-		</hotspot>
-		<hotspot  id="Platane d'Orient">
-			<lat>5°46'45.22"E</lat>
-			<lon>45°11'40.05</lon>
-		</hotspot>
-		<hotspot  id="Rosier chataigné">
-			<lat>5°46'45.21"E</lat>
-			<lon>45°11'38.26</lon>
-		</hotspot>
-		<hotspot  id="Peuplier noir">
-			<lat>5°46'45.35"E</lat>
-			<lon>45°11'38.16</lon>
-		</hotspot>
-		<hotspot  id="Mahonia de Beal">
-			<lat>5°46'45.38"E</lat>
-			<lon>45°11'37.51</lon>
-		</hotspot>
-		<hotspot  id="Forsythia blanc">
-			<lat>5°46'45.32"E</lat>
-			<lon>45°11'37.08</lon>
-		</hotspot>
-		<hotspot  id="Noisertier Tortueux">
-			<lat>5°46'45.13"E</lat>
-			<lon>45°11'36.32</lon>
-		</hotspot>
-		<hotspot  id="Bois de fer">
-			<lat>5°46'45.0"E</lat>
-			<lon>45°11'35.68</lon>
-		</hotspot>
-		<hotspot  id="Podocarpe des Andes">
-			<lat>5°46'46.01"E</lat>
-			<lon>45°11'35.52</lon>
-		</hotspot>
-		<hotspot  id="Hêtre Rouge">
-			<lat>5°46'45.83"E</lat>
-			<lon>45°11'35.27</lon>
-		</hotspot>
-		<hotspot  id="Gincko">
-			<lat>5°46'45.59"E</lat>
-			<lon>45°11'39.06</lon>
-		</hotspot>
-		<hotspot  id="Petit Houx / Fragon Piquont">
-			<lat>5°46'43.89"E</lat>
-			<lon>45°11'35.54</lon>
-		</hotspot>
-		<hotspot  id="Saule Pleureur">
-			<lat>5°46'43.62"E</lat>
-			<lon>45°11'37.7</lon>
-		</hotspot>
-		<hotspot  id="Arbre aux mouchoirs">
-			<lat>5°46'43.43"E</lat>
-			<lon>45°11'35.57</lon>
-		</hotspot>
-		<hotspot  id="Paulownia / Cyprès Chauve/Pivoine Arborescente">
-			<lat>5°46'42.86"E</lat>
-			<lon>45°11'35.44</lon>
-		</hotspot>
-		<hotspot  id="Kolwitzia">
-			<lat>5°46'41.61"E</lat>
-			<lon>45°11'35.24</lon>
-		</hotspot>
-		<hotspot  id="Yucca / Arbre de soie">
-			<lat>5°46'41.26"E</lat>
-			<lon>45°11'35.14</lon>
-		</hotspot>
-		<hotspot  id="Lilas Blanc">
-			<lat>5°46'40.77"E</lat>
-			<lon>45°11'35.35</lon>
-		</hotspot>
-		<hotspot  id="Forsythia">
-			<lat>5°46'40.53"E</lat>
-			<lon>45°11'35.34</lon>
-		</hotspot>
-		<hotspot  id="Bananier des Indiens / Cyprès lawson / Olivier Bohème/ Lilas">
-			<lat>5°46'40.13"E</lat>
-			<lon>45°11'35.35</lon>
-		</hotspot>
-		<hotspot  id="Seringat Lewis / Weigelia / Magnolia grande feuille">
-			<lat>5°46'38.9"E</lat>
-			<lon><lat>45°11'36.04</lat>
-		</hotspot>
- 
+	<hotspot  id="Sequoia">
+		<lat>45.193763</lat>
+		<lon>5.779314</lon>
+	</hotspot>
+	<hotspot  id="Erablepeau">
+		<lat>45.193839</lat>
+		<lon>5.779292</lon>
+	</hotspot>
+	<hotspot  id="HêtreFauFayard">
+		<lat>45.193763</lat>
+		<lon>5.779389</lon>
+	</hotspot>
+	<hotspot  id="PlatanedOrient">
+		<lat>45.194088</lat>
+		<lon>5.778574</lon>
+	</hotspot>
+	<hotspot  id="Rosierchataigné">
+		<lat>45.193892</lat>
+		<lon>5.779357</lon>
+	</hotspot>
+	<hotspot  id="MahoniadeBeal">
+		<lat>45.193884</lat>
+		<lon>5.779389</lon>
+	</hotspot>
 </Hotspots>

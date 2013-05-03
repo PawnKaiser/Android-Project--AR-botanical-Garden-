@@ -18,6 +18,7 @@ import com.example.mouddeneandroidproject.R;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
+import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
@@ -48,9 +49,9 @@ public class Navigation extends MapActivity {
 
 	private void populateMap(MapView mapView){	
 		 //set the local position in the map
-       // MyLocationOverlay mylocationOverlay = new MyLocationOverlay(this, mapView);
-       // mylocationOverlay.enableMyLocation();
-       // mapView.getOverlays().add(mylocationOverlay);
+        MyLocationOverlay mylocationOverlay = new MyLocationOverlay(this, mapView);
+        mylocationOverlay.enableMyLocation();
+        mapView.getOverlays().add(mylocationOverlay);
         
         //add all hotspot location
         

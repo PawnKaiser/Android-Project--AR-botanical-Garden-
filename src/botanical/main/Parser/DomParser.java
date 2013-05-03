@@ -73,25 +73,7 @@ public class DomParser {
 			return hotspots;
 	}
 	
-	private String  getHemi(String s){
-			
-		return s.
-	}
 	
-	private double  getDegree(String s ){
-		
-		return 0.0;
-	}
-	
-	private double  getMin(String s ){
-		
-		return 0.0;
-	}
-	
-	private double  getSec(String s ){
-		
-		return 0.0;
-	}
 	
 	
 	 public double DMSToDecimal(String hemisphereOUmeridien,double degres,double minutes,double secondes)

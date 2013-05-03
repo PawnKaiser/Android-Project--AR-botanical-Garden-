@@ -49,7 +49,7 @@
             android:name="botanical.main.activity.Navigation"
             android:label="@string/title_activity_navigation" >
         </activity>
-		<activity
+        <activity
             android:name="botanical.main.activity.Hotspot"
             android:label="@string/title_activity_hotspot" >
         </activity>
@@ -57,7 +57,7 @@
             android:name="botanical.main.activity.View"
             android:label="@string/title_activity_view" >
         </activity>
-        
+
         <receiver
             android:name="botanical.main.broadcastReceiver.NavigationBR"
             android:enabled="true"
@@ -93,6 +93,12 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="0xghmMgk1rUcautjHM0lJ60KyMbiHq9XQZnYZPA" />
+
+        <service
+            android:name="com.example.mouddeneandroidproject.TTS"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
 </manifest>
