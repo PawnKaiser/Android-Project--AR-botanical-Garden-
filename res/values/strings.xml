@@ -7,7 +7,9 @@
     <string name="TitleSplashScreen">The botanical garden  \n\t lovin it !</string>
     <string name="title_activity_navigation">Navigation</string>
     <string name="hello_world">Hello world!</string>
-
+	<string name="hello">Hello World, ImageTextListViewActivity!</string>
+    <string name="name">ListViewBaseAdapter</string>
+    <string name="image">Thumbnail</string>
     <string-array name="trees_array">
         <item>Baobab</item>
         <item>Sapin</item>
@@ -40,5 +42,7 @@
         <string name="aPropos">A propos de nous</string>
         <string name="listArbresTitle">Arbres de l\'Arboretum</string>
         <string name="apropos">A Propos de Nous</string>
+        <string name="TitleNavigation">Bonne Navigation !</string>
+        
 
 </resources>

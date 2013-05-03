@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.example.gp1androidproject.R;
 /**
 * 
-* @author mouddene, gilani modified it for a sake of simplicity [03/05/2013]
+* @author mouddene and Tarik Gilani modified it for a sake of simplicity [03/05/2013]
 *
 */
 public class SplashScreen extends Activity {
@@ -32,14 +32,7 @@ public class SplashScreen extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash_screen);
-		/**
-		* todo task
-		*  	XML animation
-		*  	startinf the navigation activty with :
-		* 			parse the location data file
-		* 			passing a list of the hotspot data and bounding box
-		* 		stating the broadcast receiver 	
-		*/
+
 		pb =  (ProgressBar) findViewById(R.id.progressBar1);
 		// Start lengthy operation in a background thread
 		new Thread(new Runnable() {
@@ -82,21 +75,11 @@ public class SplashScreen extends Activity {
 		//  registerReceiver(receiver, filter);
 	}
 	
-	/**
-	* 
-	*	Helper method to start the animation on the splash screen
-	*/
 	private void AnimateandSlideShow() {
 		//todo
 
 	}
 	
-	/**
-	* this method used in the loop iterate the tasks that should be done 
-	* to start the next activity
-	* @return
-	 * @throws InterruptedException 
-	*/
 	protected int doWork() throws InterruptedException {
 		
 		
@@ -138,8 +121,7 @@ public class SplashScreen extends Activity {
 			
 		}
 		else{
-			Thread.sleep(1000);
-			// starting Navigation activity		
+			Thread.sleep(1000);	
 			this.runOnUiThread(
 			new Runnable(){
 				public void run(){
@@ -156,7 +138,6 @@ public class SplashScreen extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.splash_screen, menu);
 		return true;
 	}
