@@ -13,8 +13,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import botanical.main.Parser.DomParser;
-import botanical.main.Parser.HotSpotModel;
 import botanical.main.broadcastReceiver.NavigationBR;
+import botanical.main.util.HotSpotModel;
 
 import com.example.mouddeneandroidproject.R;
 /**

@@ -10,11 +10,14 @@ import android.view.Menu;
 import android.widget.Toast;
 import botanical.main.Parser.DomParser;
 import botanical.main.services.GPS;
+import botanical.main.util.HotSpotModel;
+import botanical.main.util.HotspotItemizedOverlay;
 
 import com.example.mouddeneandroidproject.R;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
+import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
@@ -47,9 +50,9 @@ public class Navigation extends MapActivity {
 	private void populateMap(MapView mapView){
 		
 		 //set the local position in the map
-      //  MyLocationOverlay mylocationOverlay = new MyLocationOverlay(this, mapView);
-      //  mylocationOverlay.enableMyLocation();
-      //  mapView.getOverlays().add(mylocationOverlay);
+       // MyLocationOverlay mylocationOverlay = new MyLocationOverlay(this, mapView);
+       // mylocationOverlay.enableMyLocation();
+       // mapView.getOverlays().add(mylocationOverlay);
         
         //add all hotspot location
         
@@ -62,23 +65,17 @@ public class Navigation extends MapActivity {
          * loop recovering all the hotspot data.
          */
         
-        for (Iterator iterator = SplashScreen.hotspots.iterator(); iterator.hasNext();) {
-			 overlay = () iterator.next();
-			
+
+        
+        for (Iterator<HotSpotModel> iterator = SplashScreen.hotspots.iterator(); iterator.hasNext();) {
+			 HotSpotModel hsm = (HotSpotModel) iterator.next();
+			 
+			 GeoPoint p = new GeoPoint((int)(hsm.getLagitude() * 1e6),(int)(hsm.getLongitude() * 1e6));
+			 
+			  itemizedoverlay.addOverlay( new OverlayItem(p, hsm.getId(), hsm.getId()));
 		}
-       
-        
-       
-        
-        GeoPoint point = new GeoPoint((int)(15.194226 * 1e6),(int)(54.778701 * 1e6));
-        OverlayItem overlayitem = new OverlayItem(point, "Test Mido!", "it's work!");
-        
-        itemizedoverlay.addOverlay(overlayitem);
+
         mapOverlays.add(itemizedoverlay);
-        
-        GeoPoint geoPoint2 = new GeoPoint(-17528941, -149826891);
-        OverlayItem overlayitem2 = new OverlayItem(geoPoint2, "Hello from", "Moorea");
-        itemizedoverlay.addOverlay(overlayitem2);
 		
 	}
 	

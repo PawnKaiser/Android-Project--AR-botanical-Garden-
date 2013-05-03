@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Hotspots>
+   <Hotspot id="chezmoi">
+       <lat>45.181973</lat>
+       <lon>5.719676</lon>
+       <botanic>
+           <node>
+               <name>ar1</name>
+               <bearing>10</bearing>
+           </node>
+           <node>
+               <name>ar2</name>
+               <bearing>120</bearing>
+           </node>
+           <node>
+               <name>ar3</name>
+               <bearing>280</bearing>
+           </node>
+       </botanic>
+   </Hotspot> 
+     <Hotspot id="ar">
+       <lat>45.193143</lat>
+       <lon>5.778524</lon>
+       <botanic>
+           <node>
+               <name>bot1</name>
+               <bearing>150</bearing>
+           </node>
+           <node>
+               <name>bto3</name>
+               <bearing>200</bearing>
+           </node>
+           <node>
+               <name>soleil</name>
+               <bearing>100</bearing>
+           </node>
+       </botanic>
+   </Hotspot> 
+     <Hotspot id="mcdo">
+       <lat>45.183136</lat>
+       <lon>5.717735</lon>
+       <botanic>
+           <node>
+               <name>mccheese</name>
+               <bearing>80</bearing>
+           </node>
+           <node>
+               <name>frappé</name>
+               <bearing>310</bearing>
+           </node>
+           <node>
+               <name></name>
+               <bearing></bearing>
+           </node>
+       </botanic>
+   </Hotspot> 
+   
+   
+    
+ 
+</Hotspots>

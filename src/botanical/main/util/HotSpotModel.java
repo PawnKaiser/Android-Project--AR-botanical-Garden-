@@ -1,17 +1,19 @@
-package botanical.main.Parser;
+package botanical.main.util;
+
+import java.util.ArrayList;
 
 public class HotSpotModel {
 	
 	private String id; 
 	private float longitude;
 	private float latitude;
+	private ArrayList<Node> trees = new ArrayList<Node>();
 	
 	
 	/**
 	 * @param id
 	 * @param longitude
 	 * @param lagitude
-	 * @param azimuth
 	 */
 	public HotSpotModel(String id, float longitude, float latitude) {
 		this.id = id;

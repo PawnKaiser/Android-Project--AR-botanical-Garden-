@@ -11,6 +11,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import botanical.main.util.HotSpotModel;
+
 /**
  * @author mouddene
  * this class handel all hotspot in the XML Location Data
@@ -45,31 +47,32 @@ public class DomParser {
 		 
 			System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
 		 
-			NodeList nList = doc.getElementsByTagName("hotspot");
+			NodeList nList = doc.getElementsByTagName("Hotspot");
 		 
-			System.out.println("----------------------------");
 		 
 			for (int temp = 0; temp < nList.getLength(); temp++) {
 		 
 				Node nNode = nList.item(temp);
-		 
-				System.out.println("\nCurrent Element :" + nNode.getNodeName());
-		 
+		 		 
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 		 
 					Element eElement = (Element) nNode;
 		 
-					String id        = eElement.getElementsByTagName("id").item(0).getTextContent();
-					String latitude  = eElement.getElementsByTagName("latitude").item(0).getTextContent();
-					String longitude = eElement.getElementsByTagName("longitude").item(0).getTextContent();
+					String id        = eElement.getAttribute("id").intern();
+					String latitude  = eElement.getElementsByTagName("lat").item(0).getTextContent();
+					String longitude = eElement.getElementsByTagName("lon").item(0).getTextContent();
 					hotspots.add(new HotSpotModel(id, Float.parseFloat(longitude), Float.parseFloat(latitude)));
 				}
 			}
 		    } catch (Exception e) {
-			e.printStackTrace();
+		    	e.printStackTrace();
 		    }
 			return hotspots;
 	}
 	
+	
+	public static void main(String[] args) {
+	 System.out.println(new DomParser("HotspotsLocation.xml").parseHotspot().toString());;
+	}
 
 }
